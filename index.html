@@ -7,7 +7,7 @@ label{display:block;color:#aaa;font-size:13px;margin:9px 0}input,select{width:10
 .start{width:100%;font-size:24px;padding:18px}.screen{text-align:center;padding:30px 12px;border-radius:20px;background:#6d1717}.walk{background:#155b2a}.phase{font-size:48px;font-weight:900}.clock{font-size:82px;font-weight:900}
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.pause{grid-column:1/-1;font-size:30px;padding:25px}.finish{grid-column:1/-1}.hidden{display:none}.history{border-bottom:1px solid #333;padding:10px 0;display:flex;justify-content:space-between}
 .modal{position:fixed;inset:0;background:#000d;display:flex;align-items:center;justify-content:center;padding:20px}.modal .card{width:100%;max-width:420px}
-</style></head><body><div class="app"><h1>Run Trainer</h1><div class="ver">v0.4 test</div>
+</style></head><body><div class="app"><h1>Run Trainer</h1><div class="ver">v0.4.1 hotfix</div>
 <div id="setup"><div class="card"><div class="modes"><button id="mi" class="on">Interval</button><button id="mc">Continuous</button></div></div>
 <div class="card"><label>Goal time (minutes)<input id="goal" type="number" value="20"></label>
 <div id="ints" class="row"><label>Run<input id="run" type="number" step=".1" value="4"></label><label>Walk<input id="walk" type="number" step=".1" value="1"></label></div>
@@ -33,9 +33,48 @@ $('start').onclick=()=>{goalS=+$('goal').value*60;runS=+$('run').value*60;walkS=
 function tick(){if(state!=='run')return;let e=elapsed();if(mode==='c'){$('phase').textContent=goalHit?'GOAL REACHED':'RUN';$('clock').textContent=fmt(e);$('sub').textContent=goalHit?'Keep going — finish when ready':'Goal '+fmt(goalS);if($('half').checked&&!half&&e>=goalS/2){half=true;say('Halfway')}if(!goalHit&&e>=goalS){goalHit=true;say('Goal reached')}}else{let left=(phaseEnd-Date.now())/1000;if(left<=0){newPhase(phase==='RUN'?'WALK':'RUN');left=phase==='RUN'?runS:walkS}if(left<=3){let n=Math.ceil(left);if(!beeped.has(n)){beeped.add(n);beep(n===1?1050:700)}}$('screen').className='screen '+(phase==='WALK'?'walk':'');$('phase').textContent=phase;$('clock').textContent=fmt(left);$('sub').textContent=(e>=goalS?'Goal reached • ':'Elapsed ')+fmt(e);if(!goalHit&&e>=goalS){goalHit=true;say('Goal reached')}}}
 $('pause').onclick=()=>{if(state==='run'){state='paused';pauseAt=Date.now();clearInterval(timer);$('pause').textContent='RESUME'}else{let d=Date.now()-pauseAt;paused+=d;if(mode==='i')phaseEnd+=d;state='run';timer=setInterval(tick,150);$('pause').textContent='PAUSE';tick()}};
 $('next').onclick=()=>newPhase(phase==='RUN'?'WALK':'RUN');
-function end(savePrompt){clearInterval(timer);state='idle';let e=elapsed();if(savePrompt){$('summary').textContent='Time: '+fmt(e);$('modal').dataset.sec=e;$('modal').classList.remove('hidden')}else exit()}
-function exit(){$('modal').classList.add('hidden');$('active').classList.add('hidden');$('setup').classList.remove('hidden');$('pause').textContent='PAUSE'}
-$('finish').onclick=()=>end(true);$('reset').onclick=()=>{if(confirm('Reset without saving?'))end(false)};$('discard').onclick=exit;
-$('save').onclick=()=>{let d=parseFloat($('dist').value);if(isNaN(d)){alert('Enter distance.');return}let h=JSON.parse(localStorage.getItem('rt-history')||'[]');h.unshift({at:new Date().toISOString(),sec:+$('modal').dataset.sec,km:d,mode});localStorage.setItem('rt-history',JSON.stringify(h));$('dist').value='';exit();history()};
+function end(savePrompt){
+ clearInterval(timer);
+ let e=elapsed();
+ state='finished';
+ if(savePrompt){
+   $('summary').textContent='Time: '+fmt(e);
+   $('modal').dataset.sec=String(e);
+   $('dist').value='';
+   $('modal').classList.remove('hidden');
+ }else returnToSetup();
+}
+function returnToSetup(){
+ clearInterval(timer);
+ state='idle';
+ $('modal').classList.add('hidden');
+ $('active').classList.add('hidden');
+ $('setup').classList.remove('hidden');
+ $('pause').textContent='PAUSE';
+ $('screen').className='screen';
+ $('phase').textContent='RUN';
+ $('clock').textContent='00:00';
+ $('sub').textContent='';
+}
+$('finish').onclick=()=>end(true);
+$('reset').onclick=()=>{if(confirm('Reset without saving?'))end(false)};
+$('discard').onclick=()=>returnToSetup();
+$('save').onclick=()=>{
+ const raw=$('dist').value.trim().replace(',','.');
+ const d=Number(raw), sec=Number($('modal').dataset.sec);
+ if(!Number.isFinite(d)||d<0){alert('Enter a valid distance in km.');return}
+ if(!Number.isFinite(sec)||sec<0){alert('Could not read workout time.');return}
+ try{
+   let h=JSON.parse(localStorage.getItem('rt-history')||'[]');
+   if(!Array.isArray(h))h=[];
+   h.unshift({at:new Date().toISOString(),sec:sec,km:d,mode:mode});
+   localStorage.setItem('rt-history',JSON.stringify(h));
+ }catch(err){
+   alert('The run could not be saved on this device.');
+   return;
+ }
+ returnToSetup();
+ history();
+};
 function history(){let h=JSON.parse(localStorage.getItem('rt-history')||'[]');$('history').innerHTML=h.length?'':'<div style="color:#888;padding-top:10px">No saved runs yet.</div>';h.forEach((r,i)=>{let x=document.createElement('div');x.className='history';x.innerHTML='<span>#'+(h.length-i)+' · '+new Date(r.at).toLocaleDateString()+' · '+fmt(r.sec)+'</span><b>'+r.km.toFixed(2)+' km</b>';$('history').appendChild(x)})}history();})();
 </script></body></html>

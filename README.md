@@ -1,14 +1,10 @@
-# Run Trainer v0.4 test
-Test build for today's run.
+# Run Trainer v0.4.1 hotfix
 
-New:
-- Interval and Continuous modes
-- Continuous counts up, announces halfway and goal reached, then keeps running
-- Finish Run triggers save
-- Manual distance entry
-- Local activity log
-- 3-2-1 interval beeps
-- Larger Pause/Resume control
-- Reset + Next together
-- Five custom saved-command slots are NOT fully implemented in this compact test build yet; Custom is one editable pair.
-- Recorded human voice cues are not included yet.
+Fixes the Save Run freeze from v0.4.
+
+- Save now returns to setup reliably.
+- Activity log refreshes immediately.
+- Save/discard fully reset the modal and workout state.
+- Distance accepts comma or decimal point.
+- Extra validation around saved workout data.
+- Cache version bumped to avoid loading the broken v0.4 page.
