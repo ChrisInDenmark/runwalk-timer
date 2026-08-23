@@ -1,10 +1,10 @@
-# Run Trainer v0.4.1 hotfix
+# Run Trainer v0.4.4
 
-Fixes the Save Run freeze from v0.4.
+Focused reliability fixes:
 
-- Save now returns to setup reliably.
-- Activity log refreshes immediately.
-- Save/discard fully reset the modal and workout state.
-- Distance accepts comma or decimal point.
-- Extra validation around saved workout data.
-- Cache version bumped to avoid loading the broken v0.4 page.
+- Save Run panel is forced hidden on startup.
+- Save Run panel only appears after Finish Run.
+- Distance is optional when saving.
+- 0 km is valid for testing/walking.
+- Blank distance is stored as unknown and shown as — in Activity Log.
+- Cache version bumped again.
