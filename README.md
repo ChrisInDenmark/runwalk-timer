@@ -1,19 +1,14 @@
-# RunWalk Timer
+# Run Trainer v0.4 test
+Test build for today's run.
 
-## Version 0.3
-
-### New in v0.3
-- Selectable spoken command styles
-- Presets:
-  - Walk / Run
-  - Slap af / Gi den gas
-  - Whoa baby / Giddy up
-  - Easy / Push it
-- Custom command mode
-- Separate custom text for Walk and Run
-- Test Voice button now previews the selected commands
-- English and Danish voices may appear if exposed by iPhone/Safari
-- Command choices are remembered
-
-### Update
-Replace your hosted v0.2 files with the v0.3 files, then refresh the normal site in Safari and reopen the Home Screen app.
+New:
+- Interval and Continuous modes
+- Continuous counts up, announces halfway and goal reached, then keeps running
+- Finish Run triggers save
+- Manual distance entry
+- Local activity log
+- 3-2-1 interval beeps
+- Larger Pause/Resume control
+- Reset + Next together
+- Five custom saved-command slots are NOT fully implemented in this compact test build yet; Custom is one editable pair.
+- Recorded human voice cues are not included yet.

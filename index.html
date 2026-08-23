@@ -1,176 +1,41 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111111">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="RunWalk">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-192.png">
-<title>Run / Walk Timer</title>
-<style>
-:root{--bg:#111;--panel:#1b1b1b;--text:#fff;--muted:#bbb;--run:#8b0000;--walk:#0b5d1e}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
-body{min-height:100vh;min-height:100dvh;display:flex;justify-content:center}
-.app{width:min(560px,100%);padding:calc(12px + env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom))}
-h1{text-align:center;margin:0 0 4px}.version{text-align:center;color:#888;font-size:12px;margin-bottom:10px}
-.card{background:var(--panel);border-radius:18px;padding:14px;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}
-label{font-size:12px;color:var(--muted)}
-input[type=number],input[type=text],select{width:100%;margin-top:5px;padding:12px;border:0;border-radius:12px;font-size:18px;background:#fff;color:#111}
-input[type=number]{text-align:center}
-.toggle{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:5px;color:#ddd}
-.toggle input{transform:scale(1.3)}
-.status{border-radius:22px;padding:26px 14px;text-align:center;background:#222}.status.run{background:var(--run)}.status.walk{background:var(--walk)}.status.done{background:#333}
-.phase{font-size:54px;font-weight:900}.time{font-size:88px;font-weight:900;line-height:1}.small{font-size:18px;margin-top:10px}
-.progress{height:12px;background:rgba(255,255,255,.25);border-radius:99px;overflow:hidden;margin-top:15px}.bar{height:100%;width:0;background:#fff}
-.buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-button{border:0;border-radius:14px;padding:16px 12px;font-size:19px;font-weight:800}
-.primary{background:#fff;color:#111}.secondary{background:#ddd;color:#111}.danger{background:#555;color:#fff}.wide{grid-column:1/-1}
-.testvoice{margin-top:8px;background:#777;color:#fff;font-size:15px;padding:10px;width:100%}
-.custom{display:none}
-.custom.show{display:block}
-body.running .card,body.running h1,body.running .version{display:none}
-body.running .app{display:flex;min-height:100dvh;flex-direction:column;justify-content:center}
-</style>
-</head>
-<body>
-<div class="app">
-<h1>Run / Walk Timer</h1><div class="version">v0.3</div>
-
-<div class="card grid">
-<label class="full">Total workout (minutes)<input id="totalMin" type="number" min="1" value="20"></label>
-<label>Run (minutes)<input id="runMin" type="number" min="0.1" step="0.1" value="4"></label>
-<label>Walk (minutes)<input id="walkMin" type="number" min="0.1" step="0.1" value="1"></label>
-
-<label class="full">Command style
-<select id="commandStyle">
-  <option value="standard">Walk / Run</option>
-  <option value="danish">Slap af / Gi den gas</option>
-  <option value="cowboy">Whoa baby / Giddy up</option>
-  <option value="coach">Easy / Push it</option>
-  <option value="custom">Custom</option>
-</select>
-</label>
-
-<div id="customCommands" class="full custom">
-  <label>Walk command<input id="walkCommand" type="text" value="Walk"></label>
-  <label>Run command<input id="runCommand" type="text" value="Run"></label>
-</div>
-
-<label class="full">Voice
-<select id="voiceSelect"><option value="">Default iPhone voice</option></select>
-<button id="testVoice" class="testvoice" type="button">Test voice + commands</button>
-</label>
-
-<div class="toggle full"><span>Voice prompts</span><input id="voice" type="checkbox" checked></div>
-<div class="toggle full"><span>Interval change beep</span><input id="beep" type="checkbox" checked></div>
-<div class="toggle full"><span>Countdown beeps (5–1 sec)</span><input id="countdown" type="checkbox" checked></div>
-</div>
-
-<div id="status" class="status">
-<div id="phase" class="phase">READY</div>
-<div id="phaseTime" class="time">--:--</div>
-<div id="totalTime" class="small">Total remaining: --:--</div>
-<div class="progress"><div id="bar" class="bar"></div></div>
-</div>
-
-<div class="buttons">
-<button id="start" class="primary wide">Start</button>
-<button id="skip" class="secondary">Skip</button>
-<button id="stop" class="danger">Stop</button>
-<button id="reset" class="danger wide">Reset</button>
-</div>
-</div>
-
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="manifest" href="manifest.webmanifest">
+<title>Run Trainer</title><style>
+*{box-sizing:border-box}body{margin:0;background:#111;color:#fff;font-family:-apple-system,Arial}.app{max-width:540px;margin:auto;padding:18px}.card{background:#1d1d1f;padding:15px;border-radius:18px;margin:12px 0}
+h1{text-align:center}.ver{text-align:center;color:#888;font-size:12px}.modes{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#333;padding:4px;border-radius:12px}.modes button,.btn{border:0;border-radius:10px;padding:13px;font-weight:800}.modes .on{background:white;color:#111}
+label{display:block;color:#aaa;font-size:13px;margin:9px 0}input,select{width:100%;padding:12px;margin-top:5px;border:0;border-radius:10px;font-size:18px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.start{width:100%;font-size:24px;padding:18px}.screen{text-align:center;padding:30px 12px;border-radius:20px;background:#6d1717}.walk{background:#155b2a}.phase{font-size:48px;font-weight:900}.clock{font-size:82px;font-weight:900}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.pause{grid-column:1/-1;font-size:30px;padding:25px}.finish{grid-column:1/-1}.hidden{display:none}.history{border-bottom:1px solid #333;padding:10px 0;display:flex;justify-content:space-between}
+.modal{position:fixed;inset:0;background:#000d;display:flex;align-items:center;justify-content:center;padding:20px}.modal .card{width:100%;max-width:420px}
+</style></head><body><div class="app"><h1>Run Trainer</h1><div class="ver">v0.4 test</div>
+<div id="setup"><div class="card"><div class="modes"><button id="mi" class="on">Interval</button><button id="mc">Continuous</button></div></div>
+<div class="card"><label>Goal time (minutes)<input id="goal" type="number" value="20"></label>
+<div id="ints" class="row"><label>Run<input id="run" type="number" step=".1" value="4"></label><label>Walk<input id="walk" type="number" step=".1" value="1"></label></div>
+<label id="halfLabel" class="hidden"><input id="half" type="checkbox" checked style="width:auto"> Halfway announcement</label>
+<label id="styleLabel">Command style<select id="style"><option value="Walk|Run">Walk / Run</option><option value="Slap af|Gi den gas">Slap af / Gi den gas</option><option value="Whoa baby|Giddy up">Whoa baby / Giddy up</option><option value="Easy|Push it">Easy / Push it</option><option value="custom">Custom</option></select></label>
+<div id="custom" class="row hidden"><label>Walk cue<input id="wc" value="Walk"></label><label>Run cue<input id="rc" value="Run"></label></div>
+<button id="start" class="btn start">START</button></div></div>
+<div id="active" class="hidden"><div id="screen" class="screen"><div id="phase" class="phase">RUN</div><div id="clock" class="clock">00:00</div><div id="sub"></div></div>
+<div class="controls"><button id="reset" class="btn">Reset</button><button id="next" class="btn">Next</button><button id="pause" class="btn pause">PAUSE</button><button id="finish" class="btn finish">FINISH RUN</button></div></div>
+<div class="card"><b>Activity log</b><div id="history"></div></div></div>
+<div id="modal" class="modal hidden"><div class="card"><h2>Save run</h2><div id="summary"></div><label>Distance (km)<input id="dist" type="number" step=".01" placeholder="1.9"></label><div class="row"><button id="discard" class="btn">Don't save</button><button id="save" class="btn">Save run</button></div></div></div>
 <script>
-(()=>{const $=id=>document.getElementById(id);
-const totalInput=$('totalMin'),runInput=$('runMin'),walkInput=$('walkMin'),voiceInput=$('voice'),beepInput=$('beep'),countdownInput=$('countdown'),voiceSelect=$('voiceSelect');
-const commandStyle=$('commandStyle'),walkCommand=$('walkCommand'),runCommand=$('runCommand'),customCommands=$('customCommands');
-const status=$('status'),phaseEl=$('phase'),phaseTimeEl=$('phaseTime'),totalTimeEl=$('totalTime'),bar=$('bar'),startBtn=$('start');
-let state='idle',phase='RUN',totalSec=1200,runSec=240,walkSec=60,workoutEnd=0,phaseEnd=0,pausedWorkoutLeft=0,pausedPhaseLeft=0,intervalDuration=0,tickHandle=null,wakeLock=null,voices=[],played=new Set();
-
-const presets={
-  standard:{walk:'Walk',run:'Run'},
-  danish:{walk:'Slap af',run:'Gi den gas'},
-  cowboy:{walk:'Whoa baby',run:'Giddy up'},
-  coach:{walk:'Easy',run:'Push it'}
-};
-
-const now=()=>Date.now(),fmt=s=>{s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
-
-async function wake(){try{if('wakeLock'in navigator)wakeLock=await navigator.wakeLock.request('screen')}catch(e){}}
-function unwake(){try{if(wakeLock)wakeLock.release()}catch(e){}wakeLock=null}
-
-function populateVoices(){
- voices=speechSynthesis.getVoices()||[];
- const saved=localStorage.getItem('runwalk-voice-v03')||'';
- voiceSelect.innerHTML='<option value="">Default iPhone voice</option>';
- voices.forEach((v,i)=>{if(/^en(-|_)/i.test(v.lang)||/^da(-|_)/i.test(v.lang)){const o=document.createElement('option');o.value=i;o.textContent=v.name+' ('+v.lang+')';voiceSelect.appendChild(o)}});
- if(saved && [...voiceSelect.options].some(o=>o.value===saved))voiceSelect.value=saved;
-}
-if('speechSynthesis'in window){populateVoices();speechSynthesis.onvoiceschanged=populateVoices;setTimeout(populateVoices,600)}
-
-function selectedVoice(){const i=Number(voiceSelect.value);return voiceSelect.value===''?null:(voices[i]||null)}
-function say(t){if(!voiceInput.checked)return;try{const u=new SpeechSynthesisUtterance(t);const v=selectedVoice();if(v)u.voice=v;u.rate=.9;u.pitch=1;u.volume=1;speechSynthesis.speak(u)}catch(e){}}
-function tone(freq=800,d=.14,vol=.12){try{const C=window.AudioContext||window.webkitAudioContext,c=new C(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=freq;g.gain.setValueAtTime(vol,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);o.start();o.stop(c.currentTime+d)}catch(e){}}
-function intervalBeep(){if(beepInput.checked)tone(900,.22,.16)}
-function countdownBeep(n){if(countdownInput.checked)tone(n===1?1100:700,.11,.1)}
-
-function currentCommands(){
- if(commandStyle.value==='custom') return {walk:walkCommand.value.trim()||'Walk',run:runCommand.value.trim()||'Run'};
- return presets[commandStyle.value]||presets.standard;
-}
-function toggleCustom(){customCommands.classList.toggle('show',commandStyle.value==='custom')}
-
-function save(){
- localStorage.setItem('runwalk-v03',JSON.stringify({
-  total:totalInput.value,run:runInput.value,walk:walkInput.value,
-  voice:voiceInput.checked,beep:beepInput.checked,countdown:countdownInput.checked,
-  commandStyle:commandStyle.value,walkCommand:walkCommand.value,runCommand:runCommand.value
- }));
- localStorage.setItem('runwalk-voice-v03',voiceSelect.value);
-}
-function load(){
- try{
-  const s=JSON.parse(localStorage.getItem('runwalk-v03')||'{}');
-  if(s.total)totalInput.value=s.total;if(s.run)runInput.value=s.run;if(s.walk)walkInput.value=s.walk;
-  if(typeof s.voice==='boolean')voiceInput.checked=s.voice;if(typeof s.beep==='boolean')beepInput.checked=s.beep;if(typeof s.countdown==='boolean')countdownInput.checked=s.countdown;
-  if(s.commandStyle)commandStyle.value=s.commandStyle;if(s.walkCommand)walkCommand.value=s.walkCommand;if(s.runCommand)runCommand.value=s.runCommand;
- }catch(e){}
- toggleCustom();
-}
-function readConfig(){const t=+totalInput.value,r=+runInput.value,w=+walkInput.value;if(!(t>0&&r>0&&w>0)){alert('Enter values greater than 0.');return false}totalSec=t*60;runSec=r*60;walkSec=w*60;save();return true}
-
-function render(){
- if(state==='idle'){document.body.classList.remove('running');status.className='status';phaseEl.textContent='READY';phaseTimeEl.textContent='--:--';totalTimeEl.textContent='Total remaining: --:--';bar.style.width='0%';startBtn.textContent='Start';return}
- if(state==='done'){document.body.classList.remove('running');status.className='status done';phaseEl.textContent='FINISHED';phaseTimeEl.textContent='00:00';totalTimeEl.textContent='Total remaining: 00:00';bar.style.width='100%';startBtn.textContent='Start new workout';return}
- document.body.classList.toggle('running',state==='running');status.className='status '+(phase==='RUN'?'run':'walk');
- let tl,pl;if(state==='paused'){tl=pausedWorkoutLeft;pl=pausedPhaseLeft}else{const n=now();tl=Math.max(0,(workoutEnd-n)/1000);pl=Math.max(0,(phaseEnd-n)/1000)}
- phaseEl.textContent=phase;phaseTimeEl.textContent=fmt(pl);totalTimeEl.textContent='Total remaining: '+fmt(tl);bar.style.width=Math.min(100,Math.max(0,(intervalDuration-pl)/intervalDuration*100))+'%';startBtn.textContent=state==='running'?'Pause':'Resume';
-}
-function announce(p){const c=currentCommands();intervalBeep();setTimeout(()=>say(p==='RUN'?c.run:c.walk),120)}
-function startInterval(p,totalLeft){phase=p;intervalDuration=Math.min(p==='RUN'?runSec:walkSec,totalLeft);phaseEnd=now()+intervalDuration*1000;played.clear();announce(p)}
-async function startWorkout(){if(!readConfig())return;const n=now();workoutEnd=n+totalSec*1000;phase='RUN';intervalDuration=Math.min(runSec,totalSec);phaseEnd=n+intervalDuration*1000;state='running';played.clear();await wake();announce('RUN');startTicker();render()}
-function pause(){const n=now();pausedWorkoutLeft=Math.max(0,(workoutEnd-n)/1000);pausedPhaseLeft=Math.max(0,(phaseEnd-n)/1000);state='paused';stopTicker();unwake();render()}
-async function resume(){const n=now();workoutEnd=n+pausedWorkoutLeft*1000;phaseEnd=n+pausedPhaseLeft*1000;state='running';await wake();startTicker();render()}
-function finish(){state='done';stopTicker();unwake();intervalBeep();setTimeout(()=>say('Workout finished'),120);render()}
-function skip(){if(state!=='running'&&state!=='paused')return;if(state==='paused'){phase=phase==='RUN'?'WALK':'RUN';pausedPhaseLeft=Math.min(phase==='RUN'?runSec:walkSec,pausedWorkoutLeft);intervalDuration=pausedPhaseLeft;played.clear();announce(phase);render();return}const tl=Math.max(0,(workoutEnd-now())/1000);if(tl<=0)return finish();startInterval(phase==='RUN'?'WALK':'RUN',tl);render()}
-function tick(){if(state!=='running')return;const n=now(),tl=(workoutEnd-n)/1000,pl=(phaseEnd-n)/1000;if(tl<=0)return finish();if(pl<=0){startInterval(phase==='RUN'?'WALK':'RUN',tl);return render()}if(pl<=5){const v=Math.ceil(pl);if(!played.has(v)){played.add(v);countdownBeep(v)}}render()}
-function startTicker(){stopTicker();tickHandle=setInterval(tick,200)}function stopTicker(){if(tickHandle){clearInterval(tickHandle);tickHandle=null}}
-
-startBtn.onclick=()=>{if(state==='idle'||state==='done')startWorkout();else if(state==='running')pause();else resume()};
-$('skip').onclick=skip;$('stop').onclick=finish;$('reset').onclick=()=>{state='idle';stopTicker();unwake();played.clear();render()};
-$('testVoice').onclick=()=>{save();const c=currentCommands();say(c.walk+'. '+c.run+'. Workout finished.')};
-commandStyle.addEventListener('change',()=>{toggleCustom();save()});
-[totalInput,runInput,walkInput,voiceInput,beepInput,countdownInput,voiceSelect,walkCommand,runCommand].forEach(x=>x.addEventListener('change',save));
-document.addEventListener('visibilitychange',async()=>{if(document.visibilityState==='visible'&&state==='running'){await wake();tick()}});
-if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js'));
-load();render();
-})();
-</script>
-</body>
-</html>
+(()=>{const $=x=>document.getElementById(x);let mode='i',state='idle',phase='RUN',start=0,paused=0,pauseAt=0,phaseEnd=0,goalS=1200,runS=240,walkS=60,timer,half=false,goalHit=false,beeped=new Set();
+const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+const elapsed=()=>((state==='paused'?pauseAt:Date.now())-start-paused)/1000;
+function say(t){try{let u=new SpeechSynthesisUtterance(t);u.rate=.9;speechSynthesis.speak(u)}catch(e){}}
+function beep(f=750){try{let C=AudioContext||webkitAudioContext,c=new C,o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=f;g.gain.value=.1;o.start();g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.1);o.stop(c.currentTime+.1)}catch(e){}}
+function cue(){if($('style').value==='custom')return phase==='RUN'?$('rc').value:$('wc').value;let a=$('style').value.split('|');return phase==='RUN'?a[1]:a[0]}
+function setMode(m){mode=m;$('mi').className=m==='i'?'on':'';$('mc').className=m==='c'?'on':'';$('ints').classList.toggle('hidden',m==='c');$('halfLabel').classList.toggle('hidden',m==='i');$('styleLabel').classList.toggle('hidden',m==='c');$('custom').classList.toggle('hidden',m==='c'||$('style').value!=='custom');$('next').classList.toggle('hidden',m==='c')}
+$('mi').onclick=()=>setMode('i');$('mc').onclick=()=>setMode('c');$('style').onchange=()=>setMode(mode);
+function newPhase(p){phase=p;let d=p==='RUN'?runS:walkS;phaseEnd=Date.now()+d*1000;beeped.clear();beep(900);setTimeout(()=>say(cue()),100)}
+$('start').onclick=()=>{goalS=+$('goal').value*60;runS=+$('run').value*60;walkS=+$('walk').value*60;start=Date.now();paused=0;half=false;goalHit=false;state='run';$('setup').classList.add('hidden');$('active').classList.remove('hidden');if(mode==='i')newPhase('RUN');else say('Run');timer=setInterval(tick,150);tick()};
+function tick(){if(state!=='run')return;let e=elapsed();if(mode==='c'){$('phase').textContent=goalHit?'GOAL REACHED':'RUN';$('clock').textContent=fmt(e);$('sub').textContent=goalHit?'Keep going — finish when ready':'Goal '+fmt(goalS);if($('half').checked&&!half&&e>=goalS/2){half=true;say('Halfway')}if(!goalHit&&e>=goalS){goalHit=true;say('Goal reached')}}else{let left=(phaseEnd-Date.now())/1000;if(left<=0){newPhase(phase==='RUN'?'WALK':'RUN');left=phase==='RUN'?runS:walkS}if(left<=3){let n=Math.ceil(left);if(!beeped.has(n)){beeped.add(n);beep(n===1?1050:700)}}$('screen').className='screen '+(phase==='WALK'?'walk':'');$('phase').textContent=phase;$('clock').textContent=fmt(left);$('sub').textContent=(e>=goalS?'Goal reached • ':'Elapsed ')+fmt(e);if(!goalHit&&e>=goalS){goalHit=true;say('Goal reached')}}}
+$('pause').onclick=()=>{if(state==='run'){state='paused';pauseAt=Date.now();clearInterval(timer);$('pause').textContent='RESUME'}else{let d=Date.now()-pauseAt;paused+=d;if(mode==='i')phaseEnd+=d;state='run';timer=setInterval(tick,150);$('pause').textContent='PAUSE';tick()}};
+$('next').onclick=()=>newPhase(phase==='RUN'?'WALK':'RUN');
+function end(savePrompt){clearInterval(timer);state='idle';let e=elapsed();if(savePrompt){$('summary').textContent='Time: '+fmt(e);$('modal').dataset.sec=e;$('modal').classList.remove('hidden')}else exit()}
+function exit(){$('modal').classList.add('hidden');$('active').classList.add('hidden');$('setup').classList.remove('hidden');$('pause').textContent='PAUSE'}
+$('finish').onclick=()=>end(true);$('reset').onclick=()=>{if(confirm('Reset without saving?'))end(false)};$('discard').onclick=exit;
+$('save').onclick=()=>{let d=parseFloat($('dist').value);if(isNaN(d)){alert('Enter distance.');return}let h=JSON.parse(localStorage.getItem('rt-history')||'[]');h.unshift({at:new Date().toISOString(),sec:+$('modal').dataset.sec,km:d,mode});localStorage.setItem('rt-history',JSON.stringify(h));$('dist').value='';exit();history()};
+function history(){let h=JSON.parse(localStorage.getItem('rt-history')||'[]');$('history').innerHTML=h.length?'':'<div style="color:#888;padding-top:10px">No saved runs yet.</div>';h.forEach((r,i)=>{let x=document.createElement('div');x.className='history';x.innerHTML='<span>#'+(h.length-i)+' · '+new Date(r.at).toLocaleDateString()+' · '+fmt(r.sec)+'</span><b>'+r.km.toFixed(2)+' km</b>';$('history').appendChild(x)})}history();})();
+</script></body></html>
