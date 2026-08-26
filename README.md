@@ -1,10 +1,11 @@
-# Run Trainer v0.4.4
+# Run Trainer v0.5 test
 
-Focused reliability fixes:
-
-- Save Run panel is forced hidden on startup.
-- Save Run panel only appears after Finish Run.
-- Distance is optional when saving.
-- 0 km is valid for testing/walking.
-- Blank distance is stored as unknown and shown as — in Activity Log.
-- Cache version bumped again.
+Changes:
+- Voice selector restored.
+- English and Danish voices shown when exposed by the device/browser.
+- Voice choice is remembered.
+- Distance removed completely for now.
+- Saving an activity stores only date/time, duration, and workout mode.
+- Activity log moved to its own Activity screen.
+- Workout and Activity tabs added at the top.
+- After saving, the app opens the Activity screen automatically.
