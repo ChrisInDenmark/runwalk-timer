@@ -42,12 +42,12 @@ input,select{width:100%;padding:9px;margin-top:4px;border:0;border-radius:9px;fo
 </head>
 <body>
 <div class="app">
-<div class="title">Run Trainer</div><div class="ver">v0.8 test</div>
+<div class="title">Run Trainer</div><div class="ver">v0.9 friend test</div>
 <div class="nav"><button id="navWorkout" class="on">Workout</button><button id="navSettings">Settings</button></div>
 
 <section id="workoutPage">
 <div id="workoutConfig">
-<div id="workoutTitle" class="workoutTitle">Return to Running</div>
+<div id="workoutTitle" class="workoutTitle">Easy Start</div>
 
 <div class="card">
 <label>Goal time (minutes)<input id="goal" type="number" min="1" value="20"></label>
@@ -134,7 +134,7 @@ const phraseSets={
  jogsprint:['Jog','Sprint']
 };
 const defaults=[
-{id:'return',name:'Return to Running',mode:'interval',goal:20,aName:'Walk',aSec:60,bName:'Run',bSec:120,phrasePreset:'walkrun'},
+{id:'return',name:'Easy Start',mode:'interval',goal:20,aName:'Walk',aSec:60,bName:'Run',bSec:120,phrasePreset:'walkrun'},
 {id:'steady',name:'Steady Run',mode:'continuous',goal:30,aName:'Easy',aSec:0,bName:'Run',bSec:0,phrasePreset:'custom'},
 {id:'speed',name:'Speed Session',mode:'interval',goal:20,aName:'Jog',aSec:90,bName:'Sprint',bSec:30,phrasePreset:'jogsprint'}
 ];
@@ -203,7 +203,7 @@ $('newWorkout').onclick=()=>{let p=presets(),id='custom-'+Date.now();p.push({id,
 $('deleteWorkout').onclick=()=>{let p=presets();if(p.length<=1)return alert('Keep at least one workout.');if(!confirm('Delete selected workout?'))return;p=p.filter(x=>x.id!==currentId);setPresets(p);let s=settings();s.currentId=p[0].id;setSettings(s);refreshSelect()};
 
 $('voice').onchange=()=>{let s=settings();s.voice=$('voice').value;setSettings(s)}
-$('halfwayOn').checked=settings().halfwayOn!==false;$('goalOn').checked=settings().goalOn!==false;
+const initialSettings=settings();$('halfwayOn').checked=initialSettings.halfwayOn!==false;$('goalOn').checked=initialSettings.goalOn!==false;
 $('halfwayOn').onchange=()=>{let s=settings();s.halfwayOn=$('halfwayOn').checked;setSettings(s)}
 $('goalOn').onchange=()=>{let s=settings();s.goalOn=$('goalOn').checked;setSettings(s)}
 $('testVoice').onclick=()=>{let a=$('aName').value.trim()||'Easy',b=$('bName').value.trim()||'Hard';if($('mode').value==='interval'){say(a);setTimeout(()=>say(b),900)}else say(b)}

@@ -1,18 +1,19 @@
-# Run Trainer v0.8 test
+# Run Trainer v0.9 Friend Test
+
+Friend-test build based on v0.8.
 
 Changes:
-- Saved Workout selector moved to Settings.
-- Workout Mode moved to Settings.
-- Workout name is displayed as the large title on the Workout screen.
-- Name remains editable in Settings.
-- Workout screen is simplified to goal + interval timing + Start.
-- Settings layout is much more compact.
-- Phrase presets restored:
-  - Walk / Run
-  - Easy / Push it
-  - Slap af / Gi den gas
-  - Whoa baby / Giddy up
-  - Jog / Sprint
-  - Custom
-- Halfway and Goal Reached announcements remain available for interval and continuous workouts.
-- Activity history remains in IndexedDB.
+- Default workout renamed from "Return to Running" to "Easy Start".
+- Halfway announcement is enabled by default on fresh installs.
+- Goal Reached announcement is enabled by default on fresh installs.
+- Existing user choices are preserved if they previously turned either announcement off.
+- All other v0.8 behavior and layout remains unchanged.
+
+Default workout progression:
+1. Easy Start — Walk / Run
+2. Steady Run — Continuous
+3. Speed Session — Jog / Sprint
+
+Storage:
+- Workout/settings data: localStorage
+- Saved activities: IndexedDB
