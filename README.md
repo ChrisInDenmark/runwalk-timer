@@ -1,11 +1,10 @@
-# Run Trainer v0.6.1 IndexedDB
+# Run Trainer v0.7 test
 
-- Activity history now uses IndexedDB.
-- Workout presets, selected workout and voice remain in localStorage.
-- Existing v0.6 localStorage activity history is migrated once when possible.
-- Activity screen reads from IndexedDB.
-- Clear Activity clears the IndexedDB store.
-- Setup/Workout/Activity structure retained.
-- Interval seconds are selectable in 10-second steps.
-- On-screen interval label uses the configured phase name.
-- Distance remains removed.
+- Two main screens: Workout and Settings.
+- Saved Activities opens from Settings.
+- Workout screen contains interval selection and Start.
+- Test Voice reads the actual Phase A/B text currently entered.
+- Halfway and Goal Reached announcements apply to both Interval and Continuous workouts.
+- Workout names are editable.
+- Built-in suggestions remain: Return to Running, Steady Run, Speed Session.
+- Activity history stays in IndexedDB.

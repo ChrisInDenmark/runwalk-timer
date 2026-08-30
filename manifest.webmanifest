@@ -1,1 +1,8 @@
-{"name":"Run Trainer","short_name":"RunTrainer","start_url":"./","display":"standalone","background_color":"#111111","theme_color":"#111111"}
+{
+  "name": "Run Trainer",
+  "short_name": "RunTrainer",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#111111",
+  "theme_color": "#111111"
+}
