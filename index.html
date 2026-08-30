@@ -15,77 +15,64 @@ body{margin:0;background:#111;color:#fff;font-family:-apple-system,BlinkMacSyste
 .nav{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
 .nav button,.btn{border:0;border-radius:10px;padding:10px;font-weight:800}
 .nav button{background:#333;color:#ddd}.nav .on{background:#fff;color:#111}
-.card{background:#1d1d1f;padding:12px;border-radius:16px;margin:10px 0}
-.hidden{display:none!important}
+.card{background:#1d1d1f;padding:12px;border-radius:16px;margin:10px 0}.hidden{display:none!important}
 .workoutTitle{text-align:center;font-size:28px;font-weight:900;margin:8px 0 12px}
 label{display:block;color:#aaa;font-size:12px;margin:7px 0}
 input,select{width:100%;padding:9px;margin-top:4px;border:0;border-radius:9px;font-size:15px;background:#fff;color:#111}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.start{width:100%;font-size:23px;padding:17px;background:#fff;color:#111}
-.secondary{background:#666;color:#fff}.danger{background:#543030;color:#fff}
-.screen{text-align:center;padding:28px 12px;border-radius:18px;background:#6d1717}
-.screen.a{background:#155b2a}.screen.goal{background:#333}
+.row,.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.start{width:100%;font-size:23px;padding:17px;background:#fff;color:#111}.secondary{background:#666;color:#fff}.danger{background:#543030;color:#fff}
+.screen{text-align:center;padding:28px 12px;border-radius:18px;background:#6d1717}.screen.a{background:#155b2a}.screen.goal{background:#333}
 .phase{font-size:46px;font-weight:900}.clock{font-size:82px;font-weight:900}.sub{margin-top:6px;color:#bbb}
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
-.pause{grid-column:1/-1;font-size:28px;padding:22px;background:#fff;color:#111}
-.finish{grid-column:1/-1;background:#555;color:#fff}
-.history{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 0;border-bottom:1px solid #333}
-.muted{color:#999;font-size:12px}.empty{color:#888;padding:10px 0}
+.pause{grid-column:1/-1;font-size:28px;padding:22px;background:#fff;color:#111}.finish{grid-column:1/-1;background:#555;color:#fff}
+.history{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 0;border-bottom:1px solid #333}.muted{color:#999;font-size:12px}.empty{color:#888;padding:10px 0}
 .note{font-size:11px;color:#888;margin-top:6px}
-.settingsCompact .card{padding:8px 10px;margin:7px 0}
-.settingsCompact label{margin:4px 0;font-size:11px}
-.settingsCompact input,.settingsCompact select{padding:7px;font-size:14px;margin-top:2px}
-.settingsCompact .btn{padding:8px;font-size:13px}
-.settingsCompact .sectionTitle{font-weight:800;font-size:13px;margin-bottom:4px}
+.settingsCompact .card{padding:8px 10px;margin:7px 0}.settingsCompact label{margin:4px 0;font-size:11px}.settingsCompact input,.settingsCompact select{padding:7px;font-size:14px;margin-top:2px}.settingsCompact .btn{padding:8px;font-size:13px}.settingsCompact .sectionTitle{font-weight:800;font-size:13px;margin-bottom:4px}
 </style>
 </head>
 <body>
 <div class="app">
-<div class="title">Run Trainer</div><div class="ver">v0.9 friend test</div>
+<div class="title">Run Trainer</div><div class="ver">v1.0 multilingual test</div>
 <div class="nav"><button id="navWorkout" class="on">Workout</button><button id="navSettings">Settings</button></div>
 
 <section id="workoutPage">
 <div id="workoutConfig">
 <div id="workoutTitle" class="workoutTitle">Easy Start</div>
-
 <div class="card">
-<label>Goal time (minutes)<input id="goal" type="number" min="1" value="20"></label>
-
+<label id="goalLabel">Goal time (minutes)<input id="goal" type="number" min="1" value="20"></label>
 <div id="intervalFields">
-<div class="row">
-<label><span id="aLabel">Walk</span> minutes<select id="aMin"></select></label>
-<label><span id="aLabel2">Walk</span> seconds<select id="aSec"></select></label>
+<div class="row"><label><span id="aLabel">Walk</span> <span id="minutesWord">minutes</span><select id="aMin"></select></label><label><span id="aLabel2">Walk</span> <span id="secondsWord">seconds</span><select id="aSec"></select></label></div>
+<div class="row"><label><span id="bLabel">Run</span> <span id="minutesWord2">minutes</span><select id="bMin"></select></label><label><span id="bLabel2">Run</span> <span id="secondsWord2">seconds</span><select id="bSec"></select></label></div>
 </div>
-<div class="row">
-<label><span id="bLabel">Run</span> minutes<select id="bMin"></select></label>
-<label><span id="bLabel2">Run</span> seconds<select id="bSec"></select></label>
-</div>
-</div>
-
 <button id="start" class="btn start" style="margin-top:10px">START</button>
-</div>
-</div>
+</div></div>
 
 <div id="active" class="hidden">
 <div id="screen" class="screen"><div id="phase" class="phase">RUN</div><div id="clock" class="clock">00:00</div><div id="sub" class="sub"></div></div>
 <div class="controls"><button id="reset" class="btn">Reset</button><button id="next" class="btn">Next</button><button id="pause" class="btn pause">PAUSE</button><button id="finish" class="btn finish">FINISH</button></div>
 </div>
 
-<div id="savePanel" class="card hidden"><h2>Save activity?</h2><div id="saveSummary"></div><div class="actions"><button id="discard" class="btn secondary">Don't save</button><button id="saveActivity" class="btn">Save</button></div></div>
+<div id="savePanel" class="card hidden"><h2 id="saveQuestion">Save activity?</h2><div id="saveSummary"></div><div class="actions"><button id="discard" class="btn secondary">Don't save</button><button id="saveActivity" class="btn">Save</button></div></div>
 </section>
 
 <section id="settingsPage" class="hidden settingsCompact">
 <div class="card">
-<div class="sectionTitle">Workout</div>
-<label>Saved workout<select id="workoutSelect"></select></label>
-<label>Name<input id="workoutName" type="text"></label>
-<label>Mode<select id="mode"><option value="interval">Interval</option><option value="continuous">Continuous</option></select></label>
+<div class="sectionTitle" id="workoutSectionTitle">Workout</div>
+<label id="languageLabel">Language
+<select id="language">
+<option value="en">English</option>
+<option value="da">Dansk</option>
+<option value="de">Deutsch</option>
+<option value="fr">Français</option>
+</select></label>
+<label id="savedWorkoutLabel">Saved workout<select id="workoutSelect"></select></label>
+<label id="nameLabel">Name<input id="workoutName" type="text"></label>
+<label id="modeLabel">Mode<select id="mode"><option value="interval">Interval</option><option value="continuous">Continuous</option></select></label>
 </div>
 
 <div class="card">
-<div class="sectionTitle">Phrases</div>
-<label>Phrase preset
+<div class="sectionTitle" id="phrasesTitle">Phrases</div>
+<label id="phrasePresetLabel">Phrase preset
 <select id="phrasePreset">
 <option value="walkrun">Walk / Run</option>
 <option value="easypush">Easy / Push it</option>
@@ -93,23 +80,16 @@ input,select{width:100%;padding:9px;margin-top:4px;border:0;border-radius:9px;fo
 <option value="whoagiddy">Whoa baby / Giddy up</option>
 <option value="jogsprint">Jog / Sprint</option>
 <option value="custom">Custom</option>
-</select>
-</label>
-<div class="row">
-<label>Phase A<input id="aName" type="text" value="Walk"></label>
-<label>Phase B<input id="bName" type="text" value="Run"></label>
-</div>
+</select></label>
+<div class="row"><label id="phaseALabel">Phase A<input id="aName" type="text" value="Walk"></label><label id="phaseBLabel">Phase B<input id="bName" type="text" value="Run"></label></div>
 </div>
 
 <div class="card">
-<div class="sectionTitle">Voice & announcements</div>
-<label>Voice<select id="voice"><option value="">Default device voice</option></select></label>
-<div class="row">
-<button id="testVoice" class="btn secondary">Test voice</button>
-<button id="openActivity" class="btn secondary">Activities</button>
-</div>
-<label><input id="halfwayOn" type="checkbox" checked style="width:auto"> Halfway</label>
-<label><input id="goalOn" type="checkbox" checked style="width:auto"> Goal reached</label>
+<div class="sectionTitle" id="voiceTitle">Voice & announcements</div>
+<label id="voiceLabel">Voice<select id="voice"><option value="">Default device voice</option></select></label>
+<div class="row"><button id="testVoice" class="btn secondary">Test voice</button><button id="openActivity" class="btn secondary">Activities</button></div>
+<label><input id="halfwayOn" type="checkbox" checked style="width:auto"> <span id="halfwayLabel">Halfway</span></label>
+<label><input id="goalOn" type="checkbox" checked style="width:auto"> <span id="goalReachedLabel">Goal reached</span></label>
 </div>
 
 <div class="card">
@@ -118,7 +98,7 @@ input,select{width:100%;padding:9px;margin-top:4px;border:0;border-radius:9px;fo
 </div>
 
 <div id="activityPanel" class="card hidden">
-<div style="display:flex;justify-content:space-between;align-items:center"><strong>Saved activities</strong><button id="closeActivity" class="btn secondary">Close</button></div>
+<div style="display:flex;justify-content:space-between;align-items:center"><strong id="savedActivitiesTitle">Saved activities</strong><button id="closeActivity" class="btn secondary">Close</button></div>
 <div id="history"></div><button id="clearActivity" class="btn danger" style="width:100%;margin-top:8px">Clear activities</button>
 </div>
 </section>
@@ -126,27 +106,29 @@ input,select{width:100%;padding:9px;margin-top:4px;border:0;border-radius:9px;fo
 
 <script>
 (()=>{const $=id=>document.getElementById(id);
-const phraseSets={
- walkrun:['Walk','Run'],
- easypush:['Easy','Push it'],
- slapgas:['Slap af','Gi den gas'],
- whoagiddy:['Whoa baby','Giddy up'],
- jogsprint:['Jog','Sprint']
+const I18N={
+ en:{workout:'Workout',settings:'Settings',goalTime:'Goal time (minutes)',minutes:'minutes',seconds:'seconds',start:'START',reset:'Reset',next:'Next',pause:'PAUSE',resume:'RESUME',finish:'FINISH',saveActivityQ:'Save activity?',dontSave:"Don't save",save:'Save',language:'Language',savedWorkout:'Saved workout',name:'Name',mode:'Mode',interval:'Interval',continuous:'Continuous',phrases:'Phrases',phrasePreset:'Phrase preset',phaseA:'Phase A',phaseB:'Phase B',voiceAnnouncements:'Voice & announcements',voice:'Voice',defaultVoice:'Default device voice',testVoice:'Test voice',activities:'Activities',halfway:'Halfway',goalReached:'Goal reached',new:'New',delete:'Delete',saveSettings:'SAVE SETTINGS',savedActivities:'Saved activities',close:'Close',clearActivities:'Clear activities',elapsed:'Elapsed',goal:'Goal',keepGoing:'Keep going — finish when ready',easyStart:'Easy Start',steadyRun:'Steady Run',speedSession:'Speed Session',walk:'Walk',run:'Run',easy:'Easy',pushIt:'Push it',jog:'Jog',sprint:'Sprint',custom:'Custom'},
+ da:{workout:'Træning',settings:'Indstillinger',goalTime:'Måltid (minutter)',minutes:'minutter',seconds:'sekunder',start:'START',reset:'Nulstil',next:'Næste',pause:'PAUSE',resume:'FORTSÆT',finish:'AFSLUT',saveActivityQ:'Gem aktivitet?',dontSave:'Gem ikke',save:'Gem',language:'Sprog',savedWorkout:'Gemt træning',name:'Navn',mode:'Type',interval:'Interval',continuous:'Kontinuerlig',phrases:'Kommandoer',phrasePreset:'Kommandosæt',phaseA:'Fase A',phaseB:'Fase B',voiceAnnouncements:'Stemme og beskeder',voice:'Stemme',defaultVoice:'Standardstemme',testVoice:'Test stemme',activities:'Aktiviteter',halfway:'Halvvejs',goalReached:'Mål nået',new:'Ny',delete:'Slet',saveSettings:'GEM INDSTILLINGER',savedActivities:'Gemte aktiviteter',close:'Luk',clearActivities:'Slet aktiviteter',elapsed:'Tid',goal:'Mål',keepGoing:'Fortsæt — afslut når du er klar',easyStart:'Let start',steadyRun:'Roligt løb',speedSession:'Farttræning',walk:'Gå',run:'Løb',easy:'Roligt',pushIt:'Giv den gas',jog:'Jog',sprint:'Sprint',custom:'Tilpasset'},
+ de:{workout:'Training',settings:'Einstellungen',goalTime:'Zielzeit (Minuten)',minutes:'Minuten',seconds:'Sekunden',start:'START',reset:'Zurücksetzen',next:'Weiter',pause:'PAUSE',resume:'FORTSETZEN',finish:'BEENDEN',saveActivityQ:'Aktivität speichern?',dontSave:'Nicht speichern',save:'Speichern',language:'Sprache',savedWorkout:'Gespeichertes Training',name:'Name',mode:'Modus',interval:'Intervall',continuous:'Dauerlauf',phrases:'Kommandos',phrasePreset:'Kommandoset',phaseA:'Phase A',phaseB:'Phase B',voiceAnnouncements:'Stimme & Ansagen',voice:'Stimme',defaultVoice:'Standardstimme',testVoice:'Stimme testen',activities:'Aktivitäten',halfway:'Halbzeit',goalReached:'Ziel erreicht',new:'Neu',delete:'Löschen',saveSettings:'EINSTELLUNGEN SPEICHERN',savedActivities:'Gespeicherte Aktivitäten',close:'Schließen',clearActivities:'Aktivitäten löschen',elapsed:'Zeit',goal:'Ziel',keepGoing:'Weiterlaufen — beenden, wenn du bereit bist',easyStart:'Leichter Start',steadyRun:'Gleichmäßiger Lauf',speedSession:'Tempotraining',walk:'Gehen',run:'Laufen',easy:'Locker',pushIt:'Gib Gas',jog:'Joggen',sprint:'Sprint',custom:'Benutzerdefiniert'},
+ fr:{workout:'Entraînement',settings:'Réglages',goalTime:'Durée cible (minutes)',minutes:'minutes',seconds:'secondes',start:'DÉMARRER',reset:'Réinitialiser',next:'Suivant',pause:'PAUSE',resume:'REPRENDRE',finish:'TERMINER',saveActivityQ:'Enregistrer l’activité ?',dontSave:'Ne pas enregistrer',save:'Enregistrer',language:'Langue',savedWorkout:'Entraînement enregistré',name:'Nom',mode:'Mode',interval:'Intervalles',continuous:'Continu',phrases:'Commandes',phrasePreset:'Jeu de commandes',phaseA:'Phase A',phaseB:'Phase B',voiceAnnouncements:'Voix et annonces',voice:'Voix',defaultVoice:'Voix par défaut',testVoice:'Tester la voix',activities:'Activités',halfway:'Mi-parcours',goalReached:'Objectif atteint',new:'Nouveau',delete:'Supprimer',saveSettings:'ENREGISTRER',savedActivities:'Activités enregistrées',close:'Fermer',clearActivities:'Effacer les activités',elapsed:'Temps',goal:'Objectif',keepGoing:'Continuez — terminez quand vous êtes prêt',easyStart:'Départ facile',steadyRun:'Course régulière',speedSession:'Séance de vitesse',walk:'Marche',run:'Cours',easy:'Doucement',pushIt:'Accélère',jog:'Jogging',sprint:'Sprint',custom:'Personnalisé'}
 };
+const langVoicePrefix={en:'en',da:'da',de:'de',fr:'fr'};
+const playful={slapgas:['Slap af','Gi den gas'],whoagiddy:['Whoa baby','Giddy up']};
 const defaults=[
-{id:'return',name:'Easy Start',mode:'interval',goal:20,aName:'Walk',aSec:60,bName:'Run',bSec:120,phrasePreset:'walkrun'},
-{id:'steady',name:'Steady Run',mode:'continuous',goal:30,aName:'Easy',aSec:0,bName:'Run',bSec:0,phrasePreset:'custom'},
-{id:'speed',name:'Speed Session',mode:'interval',goal:20,aName:'Jog',aSec:90,bName:'Sprint',bSec:30,phrasePreset:'jogsprint'}
+{id:'return',key:'easyStart',name:'Easy Start',mode:'interval',goal:20,aKey:'walk',aName:'Walk',aSec:60,bKey:'run',bName:'Run',bSec:120,phrasePreset:'walkrun'},
+{id:'steady',key:'steadyRun',name:'Steady Run',mode:'continuous',goal:30,aKey:'easy',aName:'Easy',aSec:0,bKey:'run',bName:'Run',bSec:0,phrasePreset:'custom'},
+{id:'speed',key:'speedSession',name:'Speed Session',mode:'interval',goal:20,aKey:'jog',aName:'Jog',aSec:90,bKey:'sprint',bName:'Sprint',bSec:30,phrasePreset:'jogsprint'}
 ];
 let voices=[],currentId=null,state='idle',phase='B',startAt=0,pauseAt=0,pausedMs=0,phaseEnd=0,timer=null,counted=new Set(),finished=0,halfDone=false,goalDone=false,dbPromise=null;
 const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
 const elapsed=()=>((state==='paused'?pauseAt:Date.now())-startAt-pausedMs)/1000;
+const lang=()=>settings().language||'en';
+const t=k=>(I18N[lang()]&&I18N[lang()][k])||I18N.en[k]||k;
 
-function presets(){try{let p=JSON.parse(localStorage.getItem('rt8-presets')||'null');if(Array.isArray(p)&&p.length)return p}catch(e){}localStorage.setItem('rt8-presets',JSON.stringify(defaults));return defaults.slice()}
-function setPresets(p){localStorage.setItem('rt8-presets',JSON.stringify(p))}
-function settings(){try{return JSON.parse(localStorage.getItem('rt8-settings')||'{}')}catch(e){return{}}}
-function setSettings(s){localStorage.setItem('rt8-settings',JSON.stringify(s))}
-
+function presets(){try{let p=JSON.parse(localStorage.getItem('rt10-presets')||'null');if(Array.isArray(p)&&p.length)return p}catch(e){}localStorage.setItem('rt10-presets',JSON.stringify(defaults));return defaults.slice()}
+function setPresets(p){localStorage.setItem('rt10-presets',JSON.stringify(p))}
+function settings(){try{return JSON.parse(localStorage.getItem('rt10-settings')||'{}')}catch(e){return{}}}
+function setSettings(s){localStorage.setItem('rt10-settings',JSON.stringify(s))}
 function openDb(){if(dbPromise)return dbPromise;dbPromise=new Promise((resolve,reject)=>{let r=indexedDB.open('RunTrainerDB',1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('activities'))r.result.createObjectStore('activities',{keyPath:'id',autoIncrement:true})};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});return dbPromise}
 async function addActivity(x){let db=await openDb();return new Promise((res,rej)=>{let tx=db.transaction('activities','readwrite');tx.objectStore('activities').add(x);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
 async function getActivities(){let db=await openDb();return new Promise((res,rej)=>{let tx=db.transaction('activities','readonly'),r=tx.objectStore('activities').getAll();r.onsuccess=()=>res((r.result||[]).sort((a,b)=>new Date(b.at)-new Date(a.at)));r.onerror=()=>rej(r.error)})}
@@ -155,93 +137,105 @@ async function clearActivities(){let db=await openDb();return new Promise((res,r
 ['aMin','bMin'].forEach(id=>{for(let i=0;i<=10;i++)$(id).add(new Option(i,i))});
 ['aSec','bSec'].forEach(id=>{for(let s=0;s<60;s+=10)$(id).add(new Option(String(s).padStart(2,'0'),s))});
 
-function populateVoices(){voices=speechSynthesis.getVoices()||[];let saved=settings().voice||'';$('voice').innerHTML='<option value="">Default device voice</option>';voices.forEach((v,i)=>{if(/^en|^da/i.test(v.lang))$('voice').add(new Option(v.name+' ('+v.lang+')',i))});if(saved&&[...$('voice').options].some(o=>o.value===saved))$('voice').value=saved}
+function localizedPhraseSet(key){
+ if(key==='slapgas'||key==='whoagiddy') return playful[key];
+ const x=I18N[lang()];
+ if(key==='walkrun')return[x.walk,x.run];
+ if(key==='easypush')return[x.easy,x.pushIt];
+ if(key==='jogsprint')return[x.jog,x.sprint];
+ return null;
+}
+function populateVoices(){
+ voices=speechSynthesis.getVoices()||[];
+ let saved=settings().voiceURI||'',prefix=langVoicePrefix[lang()];
+ $('voice').innerHTML='';
+ $('voice').add(new Option(t('defaultVoice'),''));
+ voices.forEach(v=>{if(v.lang&&v.lang.toLowerCase().startsWith(prefix))$('voice').add(new Option(v.name+' ('+v.lang+')',v.voiceURI||v.name))});
+ if(saved&&[...$('voice').options].some(o=>o.value===saved))$('voice').value=saved;
+}
 if('speechSynthesis'in window){populateVoices();speechSynthesis.onvoiceschanged=populateVoices;setTimeout(populateVoices,500)}
-function say(t){try{let u=new SpeechSynthesisUtterance(t),v=$('voice').value;if(v!==''&&voices[+v])u.voice=voices[+v];u.rate=.9;speechSynthesis.speak(u)}catch(e){}}
+function say(text){try{let u=new SpeechSynthesisUtterance(text),v=$('voice').value,match=voices.find(x=>(x.voiceURI||x.name)===v);if(match)u.voice=match;u.lang=lang()==='da'?'da-DK':lang()==='de'?'de-DE':lang()==='fr'?'fr-FR':'en-US';u.rate=.9;speechSynthesis.speak(u)}catch(e){}}
 function beep(f=760){try{let C=AudioContext||webkitAudioContext,c=new C,o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=f;g.gain.value=.1;o.start();g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.1);o.stop(c.currentTime+.1)}catch(e){}}
+
+function applyLanguage(){
+ document.documentElement.lang=lang();
+ $('navWorkout').textContent=t('workout');$('navSettings').textContent=t('settings');
+ $('goalLabel').childNodes[0].nodeValue=t('goalTime');
+ ['minutesWord','minutesWord2'].forEach(id=>$(id).textContent=t('minutes'));['secondsWord','secondsWord2'].forEach(id=>$(id).textContent=t('seconds'));
+ $('start').textContent=t('start');$('reset').textContent=t('reset');$('next').textContent=t('next');$('pause').textContent=state==='paused'?t('resume'):t('pause');$('finish').textContent=t('finish');
+ $('saveQuestion').textContent=t('saveActivityQ');$('discard').textContent=t('dontSave');$('saveActivity').textContent=t('save');
+ $('workoutSectionTitle').textContent=t('workout');$('languageLabel').childNodes[0].nodeValue=t('language');$('savedWorkoutLabel').childNodes[0].nodeValue=t('savedWorkout');$('nameLabel').childNodes[0].nodeValue=t('name');$('modeLabel').childNodes[0].nodeValue=t('mode');
+ $('mode').options[0].text=t('interval');$('mode').options[1].text=t('continuous');
+ $('phrasesTitle').textContent=t('phrases');$('phrasePresetLabel').childNodes[0].nodeValue=t('phrasePreset');$('phaseALabel').childNodes[0].nodeValue=t('phaseA');$('phaseBLabel').childNodes[0].nodeValue=t('phaseB');
+ $('voiceTitle').textContent=t('voiceAnnouncements');$('voiceLabel').childNodes[0].nodeValue=t('voice');$('testVoice').textContent=t('testVoice');$('openActivity').textContent=t('activities');$('halfwayLabel').textContent=t('halfway');$('goalReachedLabel').textContent=t('goalReached');
+ $('newWorkout').textContent=t('new');$('deleteWorkout').textContent=t('delete');$('saveSettings').textContent=t('saveSettings');$('savedActivitiesTitle').textContent=t('savedActivities');$('closeActivity').textContent=t('close');$('clearActivity').textContent=t('clearActivities');
+
+ const pp=$('phrasePreset');pp.options[0].text=localizedPhraseSet('walkrun').join(' / ');pp.options[1].text=localizedPhraseSet('easypush').join(' / ');pp.options[2].text=playful.slapgas.join(' / ');pp.options[3].text=playful.whoagiddy.join(' / ');pp.options[4].text=localizedPhraseSet('jogsprint').join(' / ');pp.options[5].text=t('custom');
+ populateVoices();refreshSelect();
+}
 
 function show(page){$('workoutPage').classList.toggle('hidden',page!=='workout');$('settingsPage').classList.toggle('hidden',page!=='settings');$('navWorkout').classList.toggle('on',page==='workout');$('navSettings').classList.toggle('on',page==='settings')}
 $('navWorkout').onclick=()=>show('workout');$('navSettings').onclick=()=>show('settings');
 
-function refreshSelect(){let p=presets(),s=$('workoutSelect');s.innerHTML='';p.forEach(x=>s.add(new Option(x.name,x.id)));let saved=settings().currentId;currentId=p.some(x=>x.id===saved)?saved:p[0].id;s.value=currentId;loadWorkout(currentId)}
-function detectPhrasePreset(a,b){
- for(const [k,v] of Object.entries(phraseSets)) if(v[0]===a&&v[1]===b) return k;
- return 'custom';
+function displayName(p){return p.key?t(p.key):p.name}
+function refreshSelect(){
+ let p=presets(),s=$('workoutSelect');s.innerHTML='';p.forEach(x=>s.add(new Option(displayName(x),x.id)));
+ let saved=settings().currentId;currentId=p.some(x=>x.id===saved)?saved:p[0].id;s.value=currentId;loadWorkout(currentId)
 }
 function loadWorkout(id){
- let p=presets().find(x=>x.id===id);if(!p)return;
- currentId=id;$('workoutName').value=p.name;$('mode').value=p.mode;$('goal').value=p.goal;$('aName').value=p.aName||'Easy';$('bName').value=p.bName||'Hard';
+ let p=presets().find(x=>x.id===id);if(!p)return;currentId=id;
+ $('workoutName').value=p.key?t(p.key):p.name;$('mode').value=p.mode;$('goal').value=p.goal;
+ $('aName').value=p.aKey?t(p.aKey):p.aName||t('easy');$('bName').value=p.bKey?t(p.bKey):p.bName||t('run');
  $('aMin').value=Math.floor((p.aSec||0)/60);$('aSec').value=(p.aSec||0)%60;$('bMin').value=Math.floor((p.bSec||0)/60);$('bSec').value=(p.bSec||0)%60;
- $('phrasePreset').value=p.phrasePreset||detectPhrasePreset(p.aName,p.bName);applyTitleAndLabels();updateMode();
+ $('phrasePreset').value=p.phrasePreset||'custom';applyTitleAndLabels();updateMode();
 }
-function applyTitleAndLabels(){
- $('workoutTitle').textContent=$('workoutName').value.trim()||'Workout';
- const a=$('aName').value.trim()||'Phase A',b=$('bName').value.trim()||'Phase B';
- $('aLabel').textContent=a;$('aLabel2').textContent=a;$('bLabel').textContent=b;$('bLabel2').textContent=b;
-}
+function applyTitleAndLabels(){$('workoutTitle').textContent=$('workoutName').value.trim()||t('workout');let a=$('aName').value.trim()||t('phaseA'),b=$('bName').value.trim()||t('phaseB');$('aLabel').textContent=a;$('aLabel2').textContent=a;$('bLabel').textContent=b;$('bLabel2').textContent=b}
+function updateMode(){$('intervalFields').classList.toggle('hidden',$('mode').value!=='interval')}
 $('workoutSelect').onchange=()=>{loadWorkout($('workoutSelect').value);let s=settings();s.currentId=$('workoutSelect').value;setSettings(s)}
 $('mode').onchange=updateMode;
-function updateMode(){$('intervalFields').classList.toggle('hidden',$('mode').value!=='interval')}
-$('phrasePreset').onchange=()=>{
- let k=$('phrasePreset').value;if(k!=='custom'&&phraseSets[k]){$('aName').value=phraseSets[k][0];$('bName').value=phraseSets[k][1];applyTitleAndLabels()}
-};
-$('aName').oninput=()=>{$('phrasePreset').value=detectPhrasePreset($('aName').value,$('bName').value);applyTitleAndLabels()}
-$('bName').oninput=()=>{$('phrasePreset').value=detectPhrasePreset($('aName').value,$('bName').value);applyTitleAndLabels()}
-$('workoutName').oninput=applyTitleAndLabels;
+$('phrasePreset').onchange=()=>{let k=$('phrasePreset').value,set=localizedPhraseSet(k);if(set){$('aName').value=set[0];$('bName').value=set[1];applyTitleAndLabels()}}
+$('aName').oninput=applyTitleAndLabels;$('bName').oninput=applyTitleAndLabels;$('workoutName').oninput=applyTitleAndLabels;
 
 function saveAll(){
  let a=+$('aMin').value*60 + +$('aSec').value,b=+$('bMin').value*60 + +$('bSec').value;
  if($('mode').value==='interval'&&(a<=0||b<=0)){alert('Both interval phases need a time.');return false}
- let p=presets(),i=p.findIndex(x=>x.id===currentId),obj={id:currentId,name:$('workoutName').value.trim()||'Workout',mode:$('mode').value,goal:+$('goal').value,aName:$('aName').value.trim()||'Easy',aSec:a,bName:$('bName').value.trim()||'Hard',bSec:b,phrasePreset:$('phrasePreset').value};
+ let p=presets(),i=p.findIndex(x=>x.id===currentId),old=i>=0?p[i]:{},obj={...old,id:currentId,name:$('workoutName').value.trim()||t('workout'),mode:$('mode').value,goal:+$('goal').value,aName:$('aName').value.trim()||t('easy'),aSec:a,bName:$('bName').value.trim()||t('run'),bSec:b,phrasePreset:$('phrasePreset').value};
+ // If user edits translated built-in workout/phase names, stop auto-translating that field.
+ if(old.key && obj.name!==t(old.key)) delete obj.key;
+ if(old.aKey && obj.aName!==t(old.aKey)) delete obj.aKey;
+ if(old.bKey && obj.bName!==t(old.bKey)) delete obj.bKey;
  if(i>=0)p[i]=obj;else p.push(obj);setPresets(p);
- let s=settings();s.currentId=currentId;s.voice=$('voice').value;s.halfwayOn=$('halfwayOn').checked;s.goalOn=$('goalOn').checked;setSettings(s);
- refreshSelect();return true;
+ let s=settings();s.currentId=currentId;s.voiceURI=$('voice').value;s.halfwayOn=$('halfwayOn').checked;s.goalOn=$('goalOn').checked;setSettings(s);refreshSelect();return true;
 }
-$('saveSettings').onclick=()=>{if(saveAll())show('workout')};
-
-$('newWorkout').onclick=()=>{let p=presets(),id='custom-'+Date.now();p.push({id,name:'New Workout',mode:'interval',goal:20,aName:'Easy',aSec:60,bName:'Hard',bSec:60,phrasePreset:'custom'});setPresets(p);let s=settings();s.currentId=id;setSettings(s);refreshSelect();show('settings')};
-$('deleteWorkout').onclick=()=>{let p=presets();if(p.length<=1)return alert('Keep at least one workout.');if(!confirm('Delete selected workout?'))return;p=p.filter(x=>x.id!==currentId);setPresets(p);let s=settings();s.currentId=p[0].id;setSettings(s);refreshSelect()};
-
-$('voice').onchange=()=>{let s=settings();s.voice=$('voice').value;setSettings(s)}
-const initialSettings=settings();$('halfwayOn').checked=initialSettings.halfwayOn!==false;$('goalOn').checked=initialSettings.goalOn!==false;
+$('saveSettings').onclick=()=>{if(saveAll())show('workout')}
+$('newWorkout').onclick=()=>{let p=presets(),id='custom-'+Date.now();p.push({id,name:t('new')+' '+t('workout'),mode:'interval',goal:20,aName:t('easy'),aSec:60,bName:t('run'),bSec:60,phrasePreset:'custom'});setPresets(p);let s=settings();s.currentId=id;setSettings(s);refreshSelect();show('settings')}
+$('deleteWorkout').onclick=()=>{let p=presets();if(p.length<=1)return alert('Keep at least one workout.');if(!confirm(t('delete')+'?'))return;p=p.filter(x=>x.id!==currentId);setPresets(p);let s=settings();s.currentId=p[0].id;setSettings(s);refreshSelect()}
+$('language').value=lang();
+$('language').onchange=()=>{let s=settings();s.language=$('language').value;s.voiceURI='';setSettings(s);applyLanguage()}
+$('voice').onchange=()=>{let s=settings();s.voiceURI=$('voice').value;setSettings(s)}
+$('halfwayOn').checked=settings().halfwayOn!==false;$('goalOn').checked=settings().goalOn!==false;
 $('halfwayOn').onchange=()=>{let s=settings();s.halfwayOn=$('halfwayOn').checked;setSettings(s)}
 $('goalOn').onchange=()=>{let s=settings();s.goalOn=$('goalOn').checked;setSettings(s)}
-$('testVoice').onclick=()=>{let a=$('aName').value.trim()||'Easy',b=$('bName').value.trim()||'Hard';if($('mode').value==='interval'){say(a);setTimeout(()=>say(b),900)}else say(b)}
+$('testVoice').onclick=()=>{let a=$('aName').value.trim()||t('easy'),b=$('bName').value.trim()||t('run');if($('mode').value==='interval'){say(a);setTimeout(()=>say(b),900)}else say(b)}
 
 function current(){return presets().find(x=>x.id===currentId)||presets()[0]}
-function startPhase(which,p){phase=which;let d=which==='A'?p.aSec:p.bSec;phaseEnd=Date.now()+d*1000;counted.clear();beep(900);setTimeout(()=>say(which==='A'?p.aName:p.bName),90)}
-$('start').onclick=()=>{
- if(!saveAll())return;
- let p=current();startAt=Date.now();pausedMs=0;finished=0;halfDone=false;goalDone=false;state='run';
- $('workoutConfig').classList.add('hidden');$('savePanel').classList.add('hidden');$('active').classList.remove('hidden');$('next').classList.toggle('hidden',p.mode!=='interval');
- if(p.mode==='interval')startPhase('B',p);else say(p.bName||'Run');
- timer=setInterval(()=>tick(p),150);tick(p);
-};
-function tick(p){
- if(state!=='run')return;
- let e=elapsed(),goal=p.goal*60,s=settings();
- if(!halfDone&&s.halfwayOn!==false&&e>=goal/2){halfDone=true;say('Halfway')}
- if(!goalDone&&s.goalOn!==false&&e>=goal){goalDone=true;beep(1000);setTimeout(()=>say('Goal reached'),100)}
- if(p.mode==='continuous'){
-   $('screen').className='screen '+(goalDone?'goal':'');$('phase').textContent=goalDone?'GOAL REACHED':(p.bName||'RUN').toUpperCase();$('clock').textContent=fmt(e);$('sub').textContent=goalDone?'Keep going — finish when ready':'Goal '+fmt(goal)
- }else{
-   let left=(phaseEnd-Date.now())/1000;if(left<=0){startPhase(phase==='A'?'B':'A',p);left=phase==='A'?p.aSec:p.bSec}
-   if(left<=3&&left>0){let n=Math.ceil(left);if(!counted.has(n)){counted.add(n);beep(n===1?1050:700)}}
-   let label=phase==='A'?p.aName:p.bName;$('screen').className='screen '+(phase==='A'?'a':'');$('phase').textContent=label.toUpperCase();$('clock').textContent=fmt(left);$('sub').textContent=(goalDone?'Goal reached • ':'Elapsed ')+fmt(e)
- }
-}
-$('pause').onclick=()=>{let p=current();if(state==='run'){state='paused';pauseAt=Date.now();clearInterval(timer);$('pause').textContent='RESUME'}else if(state==='paused'){let d=Date.now()-pauseAt;pausedMs+=d;if(p.mode==='interval')phaseEnd+=d;state='run';timer=setInterval(()=>tick(p),150);$('pause').textContent='PAUSE';tick(p)}}
+function startPhase(which,p){phase=which;let d=which==='A'?p.aSec:p.bSec;phaseEnd=Date.now()+d*1000;counted.clear();beep(900);setTimeout(()=>say(which==='A'?(p.aKey?t(p.aKey):p.aName):(p.bKey?t(p.bKey):p.bName)),90)}
+$('start').onclick=()=>{if(!saveAll())return;let p=current();startAt=Date.now();pausedMs=0;finished=0;halfDone=false;goalDone=false;state='run';$('workoutConfig').classList.add('hidden');$('savePanel').classList.add('hidden');$('active').classList.remove('hidden');$('next').classList.toggle('hidden',p.mode!=='interval');if(p.mode==='interval')startPhase('B',p);else say(p.bKey?t(p.bKey):p.bName||t('run'));timer=setInterval(()=>tick(p),150);tick(p)}
+function tick(p){if(state!=='run')return;let e=elapsed(),goal=p.goal*60,s=settings();if(!halfDone&&s.halfwayOn!==false&&e>=goal/2){halfDone=true;say(t('halfway'))}if(!goalDone&&s.goalOn!==false&&e>=goal){goalDone=true;beep(1000);setTimeout(()=>say(t('goalReached')),100)}
+if(p.mode==='continuous'){$('screen').className='screen '+(goalDone?'goal':'');$('phase').textContent=goalDone?t('goalReached').toUpperCase():(p.bKey?t(p.bKey):p.bName||t('run')).toUpperCase();$('clock').textContent=fmt(e);$('sub').textContent=goalDone?t('keepGoing'):t('goal')+' '+fmt(goal)}
+else{let left=(phaseEnd-Date.now())/1000;if(left<=0){startPhase(phase==='A'?'B':'A',p);left=phase==='A'?p.aSec:p.bSec}if(left<=3&&left>0){let n=Math.ceil(left);if(!counted.has(n)){counted.add(n);beep(n===1?1050:700)}}let label=phase==='A'?(p.aKey?t(p.aKey):p.aName):(p.bKey?t(p.bKey):p.bName);$('screen').className='screen '+(phase==='A'?'a':'');$('phase').textContent=label.toUpperCase();$('clock').textContent=fmt(left);$('sub').textContent=(goalDone?t('goalReached')+' • ':t('elapsed')+' ')+fmt(e)}}
+$('pause').onclick=()=>{let p=current();if(state==='run'){state='paused';pauseAt=Date.now();clearInterval(timer);$('pause').textContent=t('resume')}else if(state==='paused'){let d=Date.now()-pauseAt;pausedMs+=d;if(p.mode==='interval')phaseEnd+=d;state='run';timer=setInterval(()=>tick(p),150);$('pause').textContent=t('pause');tick(p)}}
 $('next').onclick=()=>{let p=current();if(p.mode==='interval'&&(state==='run'||state==='paused'))startPhase(phase==='A'?'B':'A',p)}
-function finish(savePrompt){clearInterval(timer);finished=Math.max(0,elapsed());state='finished';$('active').classList.add('hidden');if(savePrompt){let p=current();$('saveSummary').textContent='Time: '+fmt(finished)+' · '+p.name;$('savePanel').classList.remove('hidden')}else resetUI()}
-function resetUI(){clearInterval(timer);state='idle';finished=0;$('savePanel').classList.add('hidden');$('active').classList.add('hidden');$('workoutConfig').classList.remove('hidden');$('pause').textContent='PAUSE'}
-$('finish').onclick=()=>finish(true);$('reset').onclick=()=>{if(confirm('Reset without saving?'))finish(false)};$('discard').onclick=resetUI
-$('saveActivity').onclick=async()=>{let p=current();try{await addActivity({at:new Date().toISOString(),sec:finished,presetName:p.name,mode:p.mode})}catch(e){return alert('Could not save activity.')}resetUI();show('settings');$('activityPanel').classList.remove('hidden');renderHistory()}
-async function renderHistory(){let h=[];try{h=await getActivities()}catch(e){$('history').innerHTML='<div class="empty">Could not read activities.</div>';return}$('history').innerHTML='';if(!h.length){$('history').innerHTML='<div class="empty">No saved activities yet.</div>';return}h.forEach(r=>{let d=new Date(r.at),row=document.createElement('div');row.className='history';row.innerHTML='<div><strong>'+r.presetName+'</strong><div class="muted">'+d.toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"})+' · '+(r.mode==='interval'?'Interval':'Continuous')+'</div></div><div><strong>'+fmt(r.sec)+'</strong></div>';$('history').appendChild(row)})}
+function finish(savePrompt){clearInterval(timer);finished=Math.max(0,elapsed());state='finished';$('active').classList.add('hidden');if(savePrompt){let p=current();$('saveSummary').textContent=fmt(finished)+' · '+displayName(p);$('savePanel').classList.remove('hidden')}else resetUI()}
+function resetUI(){clearInterval(timer);state='idle';finished=0;$('savePanel').classList.add('hidden');$('active').classList.add('hidden');$('workoutConfig').classList.remove('hidden');$('pause').textContent=t('pause')}
+$('finish').onclick=()=>finish(true);$('reset').onclick=()=>{if(confirm(t('reset')+'?'))finish(false)};$('discard').onclick=resetUI
+$('saveActivity').onclick=async()=>{let p=current();try{await addActivity({at:new Date().toISOString(),sec:finished,presetName:displayName(p),mode:p.mode})}catch(e){return alert('Could not save activity.')}resetUI();show('settings');$('activityPanel').classList.remove('hidden');renderHistory()}
+async function renderHistory(){let h=[];try{h=await getActivities()}catch(e){$('history').innerHTML='<div class="empty">Could not read activities.</div>';return}$('history').innerHTML='';if(!h.length){$('history').innerHTML='<div class="empty">—</div>';return}h.forEach(r=>{let d=new Date(r.at),row=document.createElement('div');row.className='history';row.innerHTML='<div><strong>'+r.presetName+'</strong><div class="muted">'+d.toLocaleDateString()+' · '+(r.mode==='interval'?t('interval'):t('continuous'))+'</div></div><div><strong>'+fmt(r.sec)+'</strong></div>';$('history').appendChild(row)})}
 $('openActivity').onclick=()=>{$('activityPanel').classList.remove('hidden');renderHistory()}
 $('closeActivity').onclick=()=>$('activityPanel').classList.add('hidden')
-$('clearActivity').onclick=async()=>{if(confirm('Clear all saved activities?')){await clearActivities();renderHistory()}}
+$('clearActivity').onclick=async()=>{if(confirm(t('clearActivities')+'?')){await clearActivities();renderHistory()}}
 
-(async()=>{try{await openDb()}catch(e){}refreshSelect()})();
+(async()=>{try{await openDb()}catch(e){}applyLanguage()})();
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js'));
 })();</script>
 </body></html>

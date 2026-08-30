@@ -1,19 +1,27 @@
-# Run Trainer v0.9 Friend Test
+# Run Trainer v1.0 Multilingual Test
 
-Friend-test build based on v0.8.
+Languages:
+- English (default)
+- Danish
+- German
+- French
 
-Changes:
-- Default workout renamed from "Return to Running" to "Easy Start".
-- Halfway announcement is enabled by default on fresh installs.
-- Goal Reached announcement is enabled by default on fresh installs.
-- Existing user choices are preserved if they previously turned either announcement off.
-- All other v0.8 behavior and layout remains unchanged.
+Translated:
+- Main UI labels/buttons
+- Built-in workout names
+- Standard phrase presets
+- Halfway / Goal reached announcements
+- Activity mode labels
 
-Default workout progression:
-1. Easy Start — Walk / Run
-2. Steady Run — Continuous
-3. Speed Session — Jog / Sprint
+Voice handling:
+- Voice list filters toward the selected app language.
+- Selected voice is saved by voice URI/name.
+- Test Voice uses the current Phase A/B text.
+
+Playful phrase sets remain intentionally unchanged:
+- Slap af / Gi den gas
+- Whoa baby / Giddy up
 
 Storage:
-- Workout/settings data: localStorage
-- Saved activities: IndexedDB
+- Settings/presets: localStorage
+- Activity history: IndexedDB
