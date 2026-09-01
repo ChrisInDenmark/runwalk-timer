@@ -8,3 +8,7 @@ Updated localized workout names:
 - French: Démarrage progressif / Course régulière / Séance de vitesse
 
 Translation principle: natural coaching/training language, not literal word-for-word translation.
+
+
+## v1.2 My Voice
+Record current commands, Halfway, and Goal reached locally. Custom recordings play first; device speech is the fallback. Microphone permission is requested only when Record is pressed.

@@ -32,7 +32,7 @@ input,select{width:100%;padding:9px;margin-top:4px;border:0;border-radius:9px;fo
 </head>
 <body>
 <div class="app">
-<div class="title">Run Trainer</div><div class="ver">v1.1 language update</div>
+<div class="title">Run Trainer</div><div class="ver">v1.2 my voice test</div>
 <div class="nav"><button id="navWorkout" class="on">Workout</button><button id="navSettings">Settings</button></div>
 
 <section id="workoutPage">
@@ -88,6 +88,7 @@ input,select{width:100%;padding:9px;margin-top:4px;border:0;border-radius:9px;fo
 <div class="sectionTitle" id="voiceTitle">Voice & announcements</div>
 <label id="voiceLabel">Voice<select id="voice"><option value="">Default device voice</option></select></label>
 <div class="row"><button id="testVoice" class="btn secondary">Test voice</button><button id="openActivity" class="btn secondary">Activities</button></div>
+<div class="card" style="background:#2a2a2a;margin-top:8px"><div class="sectionTitle">My Voice</div><label>Record command<select id="recordCommand"></select></label><div class="row"><button id="recordBtn" class="btn secondary">Record</button><button id="stopRecordBtn" class="btn secondary" disabled>Stop</button></div><div class="row" style="margin-top:6px"><button id="playRecordingBtn" class="btn secondary">Test recording</button><button id="deleteRecordingBtn" class="btn danger">Delete recording</button></div><div id="recordStatus" class="note">No recording selected.</div></div>
 <label><input id="halfwayOn" type="checkbox" checked style="width:auto"> <span id="halfwayLabel">Halfway</span></label>
 <label><input id="goalOn" type="checkbox" checked style="width:auto"> <span id="goalReachedLabel">Goal reached</span></label>
 </div>
@@ -129,10 +130,13 @@ function presets(){try{let p=JSON.parse(localStorage.getItem('rt10-presets')||'n
 function setPresets(p){localStorage.setItem('rt10-presets',JSON.stringify(p))}
 function settings(){try{return JSON.parse(localStorage.getItem('rt10-settings')||'{}')}catch(e){return{}}}
 function setSettings(s){localStorage.setItem('rt10-settings',JSON.stringify(s))}
-function openDb(){if(dbPromise)return dbPromise;dbPromise=new Promise((resolve,reject)=>{let r=indexedDB.open('RunTrainerDB',1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('activities'))r.result.createObjectStore('activities',{keyPath:'id',autoIncrement:true})};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});return dbPromise}
+function openDb(){if(dbPromise)return dbPromise;dbPromise=new Promise((resolve,reject)=>{let r=indexedDB.open('RunTrainerDB',2);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('activities'))r.result.createObjectStore('activities',{keyPath:'id',autoIncrement:true});if(!r.result.objectStoreNames.contains('recordings'))r.result.createObjectStore('recordings',{keyPath:'key'})};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});return dbPromise}
 async function addActivity(x){let db=await openDb();return new Promise((res,rej)=>{let tx=db.transaction('activities','readwrite');tx.objectStore('activities').add(x);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
 async function getActivities(){let db=await openDb();return new Promise((res,rej)=>{let tx=db.transaction('activities','readonly'),r=tx.objectStore('activities').getAll();r.onsuccess=()=>res((r.result||[]).sort((a,b)=>new Date(b.at)-new Date(a.at)));r.onerror=()=>rej(r.error)})}
 async function clearActivities(){let db=await openDb();return new Promise((res,rej)=>{let tx=db.transaction('activities','readwrite');tx.objectStore('activities').clear();tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
+async function putRecording(key,blob){let db=await openDb();return new Promise((res,rej)=>{let tx=db.transaction('recordings','readwrite');tx.objectStore('recordings').put({key,blob});tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
+async function getRecording(key){let db=await openDb();return new Promise((res,rej)=>{let tx=db.transaction('recordings','readonly'),r=tx.objectStore('recordings').get(key);r.onsuccess=()=>res(r.result||null);r.onerror=()=>rej(r.error)})}
+async function deleteRecording(key){let db=await openDb();return new Promise((res,rej)=>{let tx=db.transaction('recordings','readwrite');tx.objectStore('recordings').delete(key);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
 
 ['aMin','bMin'].forEach(id=>{for(let i=0;i<=10;i++)$(id).add(new Option(i,i))});
 ['aSec','bSec'].forEach(id=>{for(let s=0;s<60;s+=10)$(id).add(new Option(String(s).padStart(2,'0'),s))});
@@ -154,9 +158,18 @@ function populateVoices(){
  if(saved&&[...$('voice').options].some(o=>o.value===saved))$('voice').value=saved;
 }
 if('speechSynthesis'in window){populateVoices();speechSynthesis.onvoiceschanged=populateVoices;setTimeout(populateVoices,500)}
-function say(text){try{let u=new SpeechSynthesisUtterance(text),v=$('voice').value,match=voices.find(x=>(x.voiceURI||x.name)===v);if(match)u.voice=match;u.lang=lang()==='da'?'da-DK':lang()==='de'?'de-DE':lang()==='fr'?'fr-FR':'en-US';u.rate=.9;speechSynthesis.speak(u)}catch(e){}}
+async function say(text){try{let rec=await getRecording('phrase|'+lang()+'|'+String(text||'').trim().toLowerCase());if(rec&&rec.blob){let url=URL.createObjectURL(rec.blob),a=new Audio(url);a.onended=()=>URL.revokeObjectURL(url);await a.play();return}}catch(e){}try{let u=new SpeechSynthesisUtterance(text),v=$('voice').value,match=voices.find(x=>(x.voiceURI||x.name)===v);if(match)u.voice=match;u.lang=lang()==='da'?'da-DK':lang()==='de'?'de-DE':lang()==='fr'?'fr-FR':'en-US';u.rate=.9;speechSynthesis.speak(u)}catch(e){}}
 function beep(f=760){try{let C=AudioContext||webkitAudioContext,c=new C,o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=f;g.gain.value=.1;o.start();g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.1);o.stop(c.currentTime+.1)}catch(e){}}
 
+let mediaRecorder=null,recordChunks=[],recordStream=null;
+function recKey(text){return 'phrase|'+lang()+'|'+String(text||'').trim().toLowerCase()}
+function recordItems(){let p=current(),a=p.aKey?t(p.aKey):p.aName,b=p.bKey?t(p.bKey):p.bName;return[{text:a,key:recKey(a)},{text:b,key:recKey(b)},{text:t('halfway'),key:recKey(t('halfway'))},{text:t('goalReached'),key:recKey(t('goalReached'))}]}
+async function refreshRecordCommands(){let s=$('recordCommand');if(!s)return;let keep=s.value;s.innerHTML='';recordItems().filter((x,i,a)=>a.findIndex(y=>y.key===x.key)===i).forEach(x=>s.add(new Option(x.text,x.key)));if(keep&&[...s.options].some(o=>o.value===keep))s.value=keep;await updateRecordStatus()}
+async function updateRecordStatus(){let k=$('recordCommand')?.value;if(!k)return;let r=await getRecording(k);$('recordStatus').textContent=r?'Recording saved.':'No recording yet.'}
+async function startRecording(){try{recordStream=await navigator.mediaDevices.getUserMedia({audio:true});recordChunks=[];mediaRecorder=new MediaRecorder(recordStream);mediaRecorder.ondataavailable=e=>{if(e.data.size)recordChunks.push(e.data)};mediaRecorder.onstop=async()=>{let blob=new Blob(recordChunks,{type:mediaRecorder.mimeType||'audio/webm'});await putRecording($('recordCommand').value,blob);recordStream.getTracks().forEach(t=>t.stop());$('recordBtn').disabled=false;$('stopRecordBtn').disabled=true;updateRecordStatus()};mediaRecorder.start();$('recordBtn').disabled=true;$('stopRecordBtn').disabled=false;$('recordStatus').textContent='Recording…'}catch(e){alert('Microphone permission is required to record your voice.')}}
+function stopRecording(){if(mediaRecorder&&mediaRecorder.state!=='inactive')mediaRecorder.stop()}
+async function testRecording(){let r=await getRecording($('recordCommand').value);if(!r)return updateRecordStatus();let u=URL.createObjectURL(r.blob),a=new Audio(u);a.onended=()=>URL.revokeObjectURL(u);a.play()}
+async function removeRecording(){await deleteRecording($('recordCommand').value);updateRecordStatus()}
 function applyLanguage(){
  document.documentElement.lang=lang();
  $('navWorkout').textContent=t('workout');$('navSettings').textContent=t('settings');
@@ -187,7 +200,7 @@ function loadWorkout(id){
  $('workoutName').value=p.key?t(p.key):p.name;$('mode').value=p.mode;$('goal').value=p.goal;
  $('aName').value=p.aKey?t(p.aKey):p.aName||t('easy');$('bName').value=p.bKey?t(p.bKey):p.bName||t('run');
  $('aMin').value=Math.floor((p.aSec||0)/60);$('aSec').value=(p.aSec||0)%60;$('bMin').value=Math.floor((p.bSec||0)/60);$('bSec').value=(p.bSec||0)%60;
- $('phrasePreset').value=p.phrasePreset||'custom';applyTitleAndLabels();updateMode();
+ $('phrasePreset').value=p.phrasePreset||'custom';applyTitleAndLabels();updateMode();refreshRecordCommands();
 }
 function applyTitleAndLabels(){$('workoutTitle').textContent=$('workoutName').value.trim()||t('workout');let a=$('aName').value.trim()||t('phaseA'),b=$('bName').value.trim()||t('phaseB');$('aLabel').textContent=a;$('aLabel2').textContent=a;$('bLabel').textContent=b;$('bLabel2').textContent=b}
 function updateMode(){$('intervalFields').classList.toggle('hidden',$('mode').value!=='interval')}
@@ -217,6 +230,7 @@ $('halfwayOn').checked=settings().halfwayOn!==false;$('goalOn').checked=settings
 $('halfwayOn').onchange=()=>{let s=settings();s.halfwayOn=$('halfwayOn').checked;setSettings(s)}
 $('goalOn').onchange=()=>{let s=settings();s.goalOn=$('goalOn').checked;setSettings(s)}
 $('testVoice').onclick=()=>{let a=$('aName').value.trim()||t('easy'),b=$('bName').value.trim()||t('run');if($('mode').value==='interval'){say(a);setTimeout(()=>say(b),900)}else say(b)}
+$('recordBtn').onclick=startRecording;$('stopRecordBtn').onclick=stopRecording;$('playRecordingBtn').onclick=testRecording;$('deleteRecordingBtn').onclick=removeRecording;$('recordCommand').onchange=updateRecordStatus
 
 function current(){return presets().find(x=>x.id===currentId)||presets()[0]}
 function startPhase(which,p){phase=which;let d=which==='A'?p.aSec:p.bSec;phaseEnd=Date.now()+d*1000;counted.clear();beep(900);setTimeout(()=>say(which==='A'?(p.aKey?t(p.aKey):p.aName):(p.bKey?t(p.bKey):p.bName)),90)}
