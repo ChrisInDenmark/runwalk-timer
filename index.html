@@ -32,7 +32,7 @@ input,select{width:100%;padding:9px;margin-top:4px;border:0;border-radius:9px;fo
 </head>
 <body>
 <div class="app">
-<div class="title">Run Trainer</div><div class="ver">v1.2 my voice test</div>
+<div class="title">Run Trainer</div><div class="ver">v1.3 custom voices test</div>
 <div class="nav"><button id="navWorkout" class="on">Workout</button><button id="navSettings">Settings</button></div>
 
 <section id="workoutPage">
@@ -86,9 +86,9 @@ input,select{width:100%;padding:9px;margin-top:4px;border:0;border-radius:9px;fo
 
 <div class="card">
 <div class="sectionTitle" id="voiceTitle">Voice & announcements</div>
-<label id="voiceLabel">Voice<select id="voice"><option value="">Default device voice</option></select></label>
+<label>Voice source<select id="voiceSource"><option value="device">Device voice</option><option value="custom1">Custom Voice 1</option><option value="custom2">Custom Voice 2</option><option value="custom3">Custom Voice 3</option></select></label><label id="voiceLabel">Device voice<select id="voice"><option value="">Default device voice</option></select></label>
 <div class="row"><button id="testVoice" class="btn secondary">Test voice</button><button id="openActivity" class="btn secondary">Activities</button></div>
-<div class="card" style="background:#2a2a2a;margin-top:8px"><div class="sectionTitle">My Voice</div><label>Record command<select id="recordCommand"></select></label><div class="row"><button id="recordBtn" class="btn secondary">Record</button><button id="stopRecordBtn" class="btn secondary" disabled>Stop</button></div><div class="row" style="margin-top:6px"><button id="playRecordingBtn" class="btn secondary">Test recording</button><button id="deleteRecordingBtn" class="btn danger">Delete recording</button></div><div id="recordStatus" class="note">No recording selected.</div></div>
+<div class="card" style="background:#2a2a2a;margin-top:8px"><div class="sectionTitle">Custom Voice Recordings</div><div id="recordProfile" class="note">Recording for Custom Voice 1</div><label>Record command<select id="recordCommand"></select></label><div class="row"><button id="recordBtn" class="btn secondary">Record</button><button id="stopRecordBtn" class="btn secondary" disabled>Stop</button></div><div class="row" style="margin-top:6px"><button id="playRecordingBtn" class="btn secondary">Test recording</button><button id="deleteRecordingBtn" class="btn danger">Delete recording</button></div><div id="recordStatus" class="note">No recording selected.</div></div>
 <label><input id="halfwayOn" type="checkbox" checked style="width:auto"> <span id="halfwayLabel">Halfway</span></label>
 <label><input id="goalOn" type="checkbox" checked style="width:auto"> <span id="goalReachedLabel">Goal reached</span></label>
 </div>
@@ -158,11 +158,13 @@ function populateVoices(){
  if(saved&&[...$('voice').options].some(o=>o.value===saved))$('voice').value=saved;
 }
 if('speechSynthesis'in window){populateVoices();speechSynthesis.onvoiceschanged=populateVoices;setTimeout(populateVoices,500)}
-async function say(text){try{let rec=await getRecording('phrase|'+lang()+'|'+String(text||'').trim().toLowerCase());if(rec&&rec.blob){let url=URL.createObjectURL(rec.blob),a=new Audio(url);a.onended=()=>URL.revokeObjectURL(url);await a.play();return}}catch(e){}try{let u=new SpeechSynthesisUtterance(text),v=$('voice').value,match=voices.find(x=>(x.voiceURI||x.name)===v);if(match)u.voice=match;u.lang=lang()==='da'?'da-DK':lang()==='de'?'de-DE':lang()==='fr'?'fr-FR':'en-US';u.rate=.9;speechSynthesis.speak(u)}catch(e){}}
+async function say(text){let src=$('voiceSource')?.value||settings().voiceSource||'device';if(src!=='device'){try{let rec=await getRecording('phrase|'+src+'|'+lang()+'|'+String(text||'').trim().toLowerCase());if(rec&&rec.blob){let url=URL.createObjectURL(rec.blob),a=new Audio(url);a.onended=()=>URL.revokeObjectURL(url);await a.play();return}}catch(e){}}try{let u=new SpeechSynthesisUtterance(text),v=$('voice').value,match=voices.find(x=>(x.voiceURI||x.name)===v);if(match)u.voice=match;u.lang=lang()==='da'?'da-DK':lang()==='de'?'de-DE':lang()==='fr'?'fr-FR':'en-US';u.rate=.9;speechSynthesis.speak(u)}catch(e){}}
 function beep(f=760){try{let C=AudioContext||webkitAudioContext,c=new C,o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=f;g.gain.value=.1;o.start();g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.1);o.stop(c.currentTime+.1)}catch(e){}}
 
 let mediaRecorder=null,recordChunks=[],recordStream=null;
-function recKey(text){return 'phrase|'+lang()+'|'+String(text||'').trim().toLowerCase()}
+function activeProfile(){let v=$('voiceSource')?.value||settings().voiceSource||'custom1';return v==='device'?'custom1':v}
+function recKey(text){return 'phrase|'+activeProfile()+'|'+lang()+'|'+String(text||'').trim().toLowerCase()}
+function updateProfile(){if($('recordProfile'))$('recordProfile').textContent='Recording for '+activeProfile().replace('custom','Custom Voice ')}
 function recordItems(){let p=current(),a=p.aKey?t(p.aKey):p.aName,b=p.bKey?t(p.bKey):p.bName;return[{text:a,key:recKey(a)},{text:b,key:recKey(b)},{text:t('halfway'),key:recKey(t('halfway'))},{text:t('goalReached'),key:recKey(t('goalReached'))}]}
 async function refreshRecordCommands(){let s=$('recordCommand');if(!s)return;let keep=s.value;s.innerHTML='';recordItems().filter((x,i,a)=>a.findIndex(y=>y.key===x.key)===i).forEach(x=>s.add(new Option(x.text,x.key)));if(keep&&[...s.options].some(o=>o.value===keep))s.value=keep;await updateRecordStatus()}
 async function updateRecordStatus(){let k=$('recordCommand')?.value;if(!k)return;let r=await getRecording(k);$('recordStatus').textContent=r?'Recording saved.':'No recording yet.'}
@@ -218,14 +220,14 @@ function saveAll(){
  if(old.aKey && obj.aName!==t(old.aKey)) delete obj.aKey;
  if(old.bKey && obj.bName!==t(old.bKey)) delete obj.bKey;
  if(i>=0)p[i]=obj;else p.push(obj);setPresets(p);
- let s=settings();s.currentId=currentId;s.voiceURI=$('voice').value;s.halfwayOn=$('halfwayOn').checked;s.goalOn=$('goalOn').checked;setSettings(s);refreshSelect();return true;
+ let s=settings();s.currentId=currentId;s.voiceURI=$('voice').value;s.voiceSource=$('voiceSource').value;s.halfwayOn=$('halfwayOn').checked;s.goalOn=$('goalOn').checked;setSettings(s);refreshSelect();return true;
 }
 $('saveSettings').onclick=()=>{if(saveAll())show('workout')}
 $('newWorkout').onclick=()=>{let p=presets(),id='custom-'+Date.now();p.push({id,name:t('new')+' '+t('workout'),mode:'interval',goal:20,aName:t('easy'),aSec:60,bName:t('run'),bSec:60,phrasePreset:'custom'});setPresets(p);let s=settings();s.currentId=id;setSettings(s);refreshSelect();show('settings')}
 $('deleteWorkout').onclick=()=>{let p=presets();if(p.length<=1)return alert('Keep at least one workout.');if(!confirm(t('delete')+'?'))return;p=p.filter(x=>x.id!==currentId);setPresets(p);let s=settings();s.currentId=p[0].id;setSettings(s);refreshSelect()}
-$('language').value=lang();
+$('language').value=lang();$('voiceSource').value=settings().voiceSource||'device';updateProfile();
 $('language').onchange=()=>{let s=settings();s.language=$('language').value;s.voiceURI='';setSettings(s);applyLanguage()}
-$('voice').onchange=()=>{let s=settings();s.voiceURI=$('voice').value;setSettings(s)}
+$('voice').onchange=()=>{let s=settings();s.voiceURI=$('voice').value;setSettings(s)};$('voiceSource').onchange=()=>{let s=settings();s.voiceSource=$('voiceSource').value;setSettings(s);updateProfile();refreshRecordCommands()}
 $('halfwayOn').checked=settings().halfwayOn!==false;$('goalOn').checked=settings().goalOn!==false;
 $('halfwayOn').onchange=()=>{let s=settings();s.halfwayOn=$('halfwayOn').checked;setSettings(s)}
 $('goalOn').onchange=()=>{let s=settings();s.goalOn=$('goalOn').checked;setSettings(s)}

@@ -12,3 +12,7 @@ Translation principle: natural coaching/training language, not literal word-for-
 
 ## v1.2 My Voice
 Record current commands, Halfway, and Goal reached locally. Custom recordings play first; device speech is the fallback. Microphone permission is requested only when Record is pressed.
+
+
+## v1.3
+Device Voice plus Custom Voice 1, 2 and 3. Each custom profile stores separate recordings. Missing recordings fall back to device speech.
