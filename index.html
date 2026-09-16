@@ -34,10 +34,25 @@ input,select{width:100%;padding:9px;margin-top:4px;border:0;border-radius:9px;fo
 :root{--bg:#000;--surface:#1c1c1e;--surface2:#2c2c2e;--text:#f5f5f7;--secondary:#98989d;--separator:#38383a}
 html,body{background:#000!important;color:var(--text)!important}body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Arial,sans-serif!important}.app{max-width:560px!important;padding:calc(14px + env(safe-area-inset-top)) 16px calc(88px + env(safe-area-inset-bottom))!important}.title{font-size:13px!important;color:var(--secondary)!important}.ver{font-size:10px!important;color:#636366!important;margin-bottom:14px!important}.nav{position:fixed!important;z-index:50!important;left:50%!important;transform:translateX(-50%)!important;bottom:0!important;width:min(560px,100%)!important;margin:0!important;padding:8px 22px calc(8px + env(safe-area-inset-bottom))!important;background:rgba(20,20,22,.94)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;border-top:1px solid rgba(255,255,255,.1)!important;grid-template-columns:1fr 1fr!important;gap:20px!important}.nav button{background:transparent!important;color:#8e8e93!important;padding:9px 4px!important;font-size:12px!important}.nav button.on{color:#fff!important;background:transparent!important}.nav button.on:before{content:"●";display:block;font-size:9px;line-height:8px;margin-bottom:5px}.workoutTitle{font-size:34px!important;line-height:1.05!important;letter-spacing:-.025em!important;text-align:left!important;margin:12px 0 18px!important}.card{background:var(--surface)!important;border-radius:16px!important;padding:14px!important;margin:10px 0!important;box-shadow:none!important}.card .card{background:var(--surface2)!important}label{font-size:12px!important;color:var(--secondary)!important}input,select{background:var(--surface2)!important;color:#fff!important;border:0!important;border-radius:10px!important;padding:11px 12px!important;font-size:16px!important;min-height:44px!important}.btn{min-height:44px!important;border-radius:12px!important;font-size:15px!important}.start{background:#f5f5f7!important;color:#000!important;font-size:20px!important;min-height:58px!important;border-radius:16px!important}.secondary{background:var(--surface2)!important;color:#fff!important}.danger{background:#3a1f22!important;color:#ff6961!important}.sectionTitle{font-size:12px!important;color:var(--secondary)!important;text-transform:uppercase!important;letter-spacing:.06em!important}.settingsCompact .card{padding:12px 14px!important;margin:10px 0!important}.note{color:var(--secondary)!important}.screen{min-height:390px!important;border-radius:28px!important;padding:42px 18px 28px!important;display:flex!important;flex-direction:column!important;justify-content:center!important}.phase{font-size:30px!important}.clock{font-size:92px!important;line-height:1!important;letter-spacing:-.055em!important;font-variant-numeric:tabular-nums!important;margin:18px 0!important}.sub{font-size:16px!important;color:rgba(255,255,255,.72)!important}.controls{margin-top:12px!important;gap:10px!important}.pause{font-size:25px!important;min-height:72px!important;border-radius:18px!important}.finish{background:var(--surface)!important;color:#ff6961!important}#continuousBreakWrap{margin:12px 0!important}#breakBtn{width:100%!important;min-height:58px!important;border-radius:16px!important;font-size:18px!important}#settingsPage>.card>label{padding:2px 0 8px!important;border-bottom:1px solid var(--separator)!important}#settingsPage>.card>label:last-child{border-bottom:0!important}#aboutHelpPanel{line-height:1.45!important}#aboutHelpPanel p{color:#d1d1d6!important}
 </style>
+
+<style id="settings-v17">
+.settings-home-row{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:58px;padding:10px 4px;border:0;border-bottom:1px solid var(--separator,#38383a);background:transparent;color:#fff;text-align:left;font:inherit}
+.settings-home-row:last-child{border-bottom:0}
+.settings-home-main{font-size:16px;font-weight:600}
+.settings-home-value{font-size:13px;color:#98989d;margin-top:3px;max-width:250px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.settings-chevron{font-size:24px;color:#636366;font-weight:300}
+.settings-subhead{display:flex;align-items:center;gap:8px;margin:6px 0 12px}
+.settings-back{border:0;background:transparent;color:#fff;font-size:16px;padding:8px 6px 8px 0}
+.settings-subtitle{font-size:25px;font-weight:750;letter-spacing:-.02em}
+#settingsHome .card{padding:0 14px!important}
+#settingsHome .sectionTitle{padding:14px 4px 4px!important}
+.settingsSubPage>.card{margin-top:8px!important}
+</style>
+
 </head>
 <body>
 <div class="app">
-<div class="title">Run Trainer</div><div class="ver">v1.6 UI redesign about + help</div>
+<div class="title">Run Trainer</div><div class="ver">v1.7 settings redesign about + help</div>
 <div class="nav"><button id="navWorkout" class="on">Workout</button><button id="navSettings">Settings</button></div>
 
 <section id="workoutPage">
@@ -62,6 +77,29 @@ html,body{background:#000!important;color:var(--text)!important}body{font-family
 </section>
 
 <section id="settingsPage" class="hidden settingsCompact">
+<div id="settingsHome">
+  <div class="card">
+    <button class="settings-home-row" data-settings-page="savedWorkoutsPage">
+      <span><div class="settings-home-main">Saved Workouts</div><div id="homeWorkoutValue" class="settings-home-value">Easy Start · Interval</div></span><span class="settings-chevron">›</span>
+    </button>
+    <button class="settings-home-row" data-settings-page="coachingPage">
+      <span><div class="settings-home-main">Coaching & Commands</div><div id="homeCoachingValue" class="settings-home-value">Walk / Run</div></span><span class="settings-chevron">›</span>
+    </button>
+    <button class="settings-home-row" data-settings-page="voicePage">
+      <span><div class="settings-home-main">Voice</div><div id="homeVoiceValue" class="settings-home-value">Device voice</div></span><span class="settings-chevron">›</span>
+    </button>
+    <button class="settings-home-row" data-settings-page="languagePage">
+      <span><div class="settings-home-main">Language</div><div id="homeLanguageValue" class="settings-home-value">English</div></span><span class="settings-chevron">›</span>
+    </button>
+    <button id="homeActivitiesBtn" class="settings-home-row">
+      <span><div class="settings-home-main">Saved Activities</div></span><span class="settings-chevron">›</span>
+    </button>
+    <button id="homeAboutBtn" class="settings-home-row">
+      <span><div class="settings-home-main">About & Help</div></span><span class="settings-chevron">›</span>
+    </button>
+  </div>
+</div>
+
 <div class="card">
 <div class="sectionTitle" id="workoutSectionTitle">Workout</div>
 <label id="languageLabel">Language
@@ -211,10 +249,10 @@ function applyLanguage(){
 
 function aboutHelpHtml(){
  const content={
- en:`<h3>About Run Trainer</h3><p>Run Trainer is a simple coaching timer for getting started, returning to running, steady runs, and interval training.</p><h3>How to use it</h3><p><b>Easy Start / Interval:</b> set two phases such as Walk and Run. The app announces each change and keeps cycling until you finish.</p><p><b>Steady Run / Continuous:</b> run continuously toward your goal time. Halfway and Goal reached can be announced without stopping the timer.</p><p><b>Break:</b> during a continuous run, tap <b>BREAK 1:00</b> for a one-minute recovery. The main workout timer keeps running. A start command plays immediately and a return command plays when the break ends.</p><h3>Voice & recordings</h3><p>Choose Device Voice or Custom Voice 1, 2, or 3. Custom voices can record workout commands, Halfway, Goal reached, and continuous-run break commands. If a custom recording is missing, Run Trainer falls back to the selected device voice.</p><h3>Your data</h3><p>Settings and workout presets are stored locally on this device. Activities and custom voice recordings are stored locally in browser storage/IndexedDB. Nothing is uploaded by the app. Clearing Safari or browser website data can remove this information.</p><h3>About the creator</h3><p>Created by Chris as a simple, motivating running companion—first to make run/walk training easier, then expanded for continuous running and speed sessions.</p><p class="muted">Version v1.6 UI redesign about + help</p>`,
- da:`<h3>Om Run Trainer</h3><p>Run Trainer er en enkel træningsmakker til opstart, tilbagevenden til løb, rolige ture og intervaltræning.</p><h3>Sådan bruger du den</h3><p><b>Kom godt i gang / Interval:</b> vælg to faser, fx Gå og Løb. Appen annoncerer hvert skift og fortsætter, indtil du afslutter træningen.</p><p><b>Roligt løb / Kontinuerligt:</b> løb mod din valgte træningstid. Halvvejs og Målet er nået kan annonceres uden at stoppe timeren.</p><p><b>Pause:</b> under et kontinuerligt løb kan du trykke <b>BREAK 1:00</b> for ét minuts aktiv pause. Den samlede træningstid fortsætter.</p><h3>Stemme og optagelser</h3><p>Vælg enhedens stemme eller Custom Voice 1, 2 eller 3. Du kan optage egne kommandoer. Hvis en optagelse mangler, bruges enhedens stemme automatisk.</p><h3>Dine data</h3><p>Indstillinger, aktiviteter og stemmeoptagelser gemmes lokalt på enheden. Appen uploader ikke oplysninger. Hvis browserens webstedsdata slettes, kan oplysningerne også blive slettet.</p><h3>Om skaberen</h3><p>Skabt af Chris som en enkel og motiverende løbemakker.</p><p class="muted">Version v1.6 UI redesign about + help</p>`,
- de:`<h3>Über Run Trainer</h3><p>Run Trainer ist ein einfacher Trainingsbegleiter für den Einstieg, den Wiedereinstieg, ruhige Dauerläufe und Intervalle.</p><h3>So funktioniert es</h3><p><b>Sanfter Einstieg / Intervalle:</b> zwei Phasen wie Gehen und Laufen einstellen. Die App sagt jeden Wechsel an.</p><p><b>Ruhiger Dauerlauf:</b> kontinuierlich bis zur gewählten Trainingszeit laufen. Halbzeit und Trainingsziel können angesagt werden, ohne den Timer zu stoppen.</p><p><b>Pause:</b> während eines Dauerlaufs startet <b>BREAK 1:00</b> eine einminütige Erholung. Die Gesamtzeit läuft weiter.</p><h3>Stimme & Aufnahmen</h3><p>Gerätestimme oder Custom Voice 1, 2 oder 3 auswählen. Eigene Ansagen können lokal aufgenommen werden. Fehlt eine Aufnahme, wird automatisch die Gerätestimme verwendet.</p><h3>Deine Daten</h3><p>Einstellungen, Aktivitäten und Sprachaufnahmen werden lokal auf dem Gerät gespeichert und nicht von der App hochgeladen. Beim Löschen der Website-Daten können sie verloren gehen.</p><h3>Über den Ersteller</h3><p>Von Chris als einfacher, motivierender Laufbegleiter entwickelt.</p><p class="muted">Version v1.6 UI redesign about + help</p>`,
- fr:`<h3>À propos de Run Trainer</h3><p>Run Trainer est un coach simple pour débuter, reprendre la course, courir en continu et faire des séances d’intervalles.</p><h3>Comment l’utiliser</h3><p><b>Démarrage progressif / Intervalles :</b> règle deux phases, par exemple Marche et Course. L’application annonce chaque changement.</p><p><b>Course régulière / Continue :</b> cours jusqu’à ton objectif de temps. Mi-parcours et Objectif atteint peuvent être annoncés sans arrêter le chrono.</p><p><b>Pause :</b> pendant une course continue, <b>BREAK 1:00</b> lance une récupération d’une minute. Le chrono principal continue.</p><h3>Voix et enregistrements</h3><p>Choisis la voix de l’appareil ou Custom Voice 1, 2 ou 3. Tu peux enregistrer tes propres consignes. S’il manque un enregistrement, la voix de l’appareil est utilisée automatiquement.</p><h3>Tes données</h3><p>Les réglages, activités et enregistrements vocaux restent stockés localement sur l’appareil. L’application ne les envoie pas. La suppression des données du site peut aussi les supprimer.</p><h3>À propos du créateur</h3><p>Créé par Chris comme compagnon de course simple et motivant.</p><p class="muted">Version v1.6 UI redesign about + help</p>`};
+ en:`<h3>About Run Trainer</h3><p>Run Trainer is a simple coaching timer for getting started, returning to running, steady runs, and interval training.</p><h3>How to use it</h3><p><b>Easy Start / Interval:</b> set two phases such as Walk and Run. The app announces each change and keeps cycling until you finish.</p><p><b>Steady Run / Continuous:</b> run continuously toward your goal time. Halfway and Goal reached can be announced without stopping the timer.</p><p><b>Break:</b> during a continuous run, tap <b>BREAK 1:00</b> for a one-minute recovery. The main workout timer keeps running. A start command plays immediately and a return command plays when the break ends.</p><h3>Voice & recordings</h3><p>Choose Device Voice or Custom Voice 1, 2, or 3. Custom voices can record workout commands, Halfway, Goal reached, and continuous-run break commands. If a custom recording is missing, Run Trainer falls back to the selected device voice.</p><h3>Your data</h3><p>Settings and workout presets are stored locally on this device. Activities and custom voice recordings are stored locally in browser storage/IndexedDB. Nothing is uploaded by the app. Clearing Safari or browser website data can remove this information.</p><h3>About the creator</h3><p>Created by Chris as a simple, motivating running companion—first to make run/walk training easier, then expanded for continuous running and speed sessions.</p><p class="muted">Version v1.7 settings redesign about + help</p>`,
+ da:`<h3>Om Run Trainer</h3><p>Run Trainer er en enkel træningsmakker til opstart, tilbagevenden til løb, rolige ture og intervaltræning.</p><h3>Sådan bruger du den</h3><p><b>Kom godt i gang / Interval:</b> vælg to faser, fx Gå og Løb. Appen annoncerer hvert skift og fortsætter, indtil du afslutter træningen.</p><p><b>Roligt løb / Kontinuerligt:</b> løb mod din valgte træningstid. Halvvejs og Målet er nået kan annonceres uden at stoppe timeren.</p><p><b>Pause:</b> under et kontinuerligt løb kan du trykke <b>BREAK 1:00</b> for ét minuts aktiv pause. Den samlede træningstid fortsætter.</p><h3>Stemme og optagelser</h3><p>Vælg enhedens stemme eller Custom Voice 1, 2 eller 3. Du kan optage egne kommandoer. Hvis en optagelse mangler, bruges enhedens stemme automatisk.</p><h3>Dine data</h3><p>Indstillinger, aktiviteter og stemmeoptagelser gemmes lokalt på enheden. Appen uploader ikke oplysninger. Hvis browserens webstedsdata slettes, kan oplysningerne også blive slettet.</p><h3>Om skaberen</h3><p>Skabt af Chris som en enkel og motiverende løbemakker.</p><p class="muted">Version v1.7 settings redesign about + help</p>`,
+ de:`<h3>Über Run Trainer</h3><p>Run Trainer ist ein einfacher Trainingsbegleiter für den Einstieg, den Wiedereinstieg, ruhige Dauerläufe und Intervalle.</p><h3>So funktioniert es</h3><p><b>Sanfter Einstieg / Intervalle:</b> zwei Phasen wie Gehen und Laufen einstellen. Die App sagt jeden Wechsel an.</p><p><b>Ruhiger Dauerlauf:</b> kontinuierlich bis zur gewählten Trainingszeit laufen. Halbzeit und Trainingsziel können angesagt werden, ohne den Timer zu stoppen.</p><p><b>Pause:</b> während eines Dauerlaufs startet <b>BREAK 1:00</b> eine einminütige Erholung. Die Gesamtzeit läuft weiter.</p><h3>Stimme & Aufnahmen</h3><p>Gerätestimme oder Custom Voice 1, 2 oder 3 auswählen. Eigene Ansagen können lokal aufgenommen werden. Fehlt eine Aufnahme, wird automatisch die Gerätestimme verwendet.</p><h3>Deine Daten</h3><p>Einstellungen, Aktivitäten und Sprachaufnahmen werden lokal auf dem Gerät gespeichert und nicht von der App hochgeladen. Beim Löschen der Website-Daten können sie verloren gehen.</p><h3>Über den Ersteller</h3><p>Von Chris als einfacher, motivierender Laufbegleiter entwickelt.</p><p class="muted">Version v1.7 settings redesign about + help</p>`,
+ fr:`<h3>À propos de Run Trainer</h3><p>Run Trainer est un coach simple pour débuter, reprendre la course, courir en continu et faire des séances d’intervalles.</p><h3>Comment l’utiliser</h3><p><b>Démarrage progressif / Intervalles :</b> règle deux phases, par exemple Marche et Course. L’application annonce chaque changement.</p><p><b>Course régulière / Continue :</b> cours jusqu’à ton objectif de temps. Mi-parcours et Objectif atteint peuvent être annoncés sans arrêter le chrono.</p><p><b>Pause :</b> pendant une course continue, <b>BREAK 1:00</b> lance une récupération d’une minute. Le chrono principal continue.</p><h3>Voix et enregistrements</h3><p>Choisis la voix de l’appareil ou Custom Voice 1, 2 ou 3. Tu peux enregistrer tes propres consignes. S’il manque un enregistrement, la voix de l’appareil est utilisée automatiquement.</p><h3>Tes données</h3><p>Les réglages, activités et enregistrements vocaux restent stockés localement sur l’appareil. L’application ne les envoie pas. La suppression des données du site peut aussi les supprimer.</p><h3>À propos du créateur</h3><p>Créé par Chris comme compagnon de course simple et motivant.</p><p class="muted">Version v1.7 settings redesign about + help</p>`};
  return content[lang()]||content.en;
 }
 function renderAboutHelp(){
@@ -293,4 +331,106 @@ $('closeAboutHelp').onclick=()=>$('aboutHelpPanel').classList.add('hidden');
 (async()=>{try{await openDb()}catch(e){}applyLanguage()})();
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js'));
 })();</script>
+
+<script id="settings-redesign-v17">
+(function(){
+ function E(id){return document.getElementById(id)}
+ function mkPage(id,title){
+   let p=document.createElement('div');p.id=id;p.className='settingsSubPage hidden';
+   let h=document.createElement('div');h.className='settings-subhead';
+   h.innerHTML='<button class="settings-back">‹ Settings</button><div class="settings-subtitle">'+title+'</div>';
+   p.appendChild(h);E('settingsPage').appendChild(p);
+   h.querySelector('.settings-back').onclick=showHome;
+   return p;
+ }
+ function showHome(){
+   document.querySelectorAll('.settingsSubPage').forEach(x=>x.classList.add('hidden'));
+   E('settingsHome').classList.remove('hidden');updateHome();
+ }
+ function showPage(id){
+   E('settingsHome').classList.add('hidden');
+   document.querySelectorAll('.settingsSubPage').forEach(x=>x.classList.add('hidden'));
+   let p=E(id);if(p)p.classList.remove('hidden');
+ }
+ function nearestCard(el){return el&&el.closest('.card')}
+ function updateHome(){
+   try{
+     let w=E('workoutName')?.value||E('workoutTitle')?.textContent||'';
+     let mode=E('mode')?.selectedOptions?.[0]?.text||'';
+     E('homeWorkoutValue').textContent=[w,mode].filter(Boolean).join(' · ');
+     let a=E('aName')?.value||'',b=E('bName')?.value||'';
+     if(E('mode')?.value==='continuous'){
+       E('homeCoachingValue').textContent=E('motivationText')?.value||'Continuous coaching';
+     }else E('homeCoachingValue').textContent=[a,b].filter(Boolean).join(' / ');
+     let vs=E('voiceSource');
+     E('homeVoiceValue').textContent=vs?.selectedOptions?.[0]?.text||'Device voice';
+     let l=E('language');
+     E('homeLanguageValue').textContent=l?.selectedOptions?.[0]?.text||'English';
+   }catch(e){}
+ }
+ function init(){
+   let settings=E('settingsPage'),home=E('settingsHome');if(!settings||!home)return;
+
+   // Capture original cards before creating pages.
+   let originalCards=[...settings.children].filter(x=>x.classList&&x.classList.contains('card'));
+   let workoutCard=nearestCard(E('workoutSelect'));
+   let phraseCard=nearestCard(E('phrasePreset'));
+   let voiceCard=nearestCard(E('voiceSource'))||nearestCard(E('voice'));
+   let actionCard=nearestCard(E('saveSettings'));
+
+   let saved=mkPage('savedWorkoutsPage','Saved Workouts');
+   let coach=mkPage('coachingPage','Coaching & Commands');
+   let voice=mkPage('voicePage','Voice');
+   let language=mkPage('languagePage','Language');
+
+   // Build a dedicated language card and move only the existing language label.
+   let langLabel=E('language')?.closest('label');
+   if(langLabel){
+     let lc=document.createElement('div');lc.className='card';lc.appendChild(langLabel);language.appendChild(lc);
+   }
+
+   // Workout card keeps saved workout/name/mode. Move it after language has been extracted.
+   if(workoutCard)saved.appendChild(workoutCard);
+   if(actionCard)saved.appendChild(actionCard);
+
+   if(phraseCard)coach.appendChild(phraseCard);
+
+   // Continuous coaching might be nested in phrase card already; if not, move its card.
+   let cc=E('continuousCoachingSettings');
+   if(cc && !coach.contains(cc)){
+     let c=nearestCard(cc);if(c)coach.appendChild(c);else coach.appendChild(cc);
+   }
+
+   if(voiceCard)voice.appendChild(voiceCard);
+
+   // Hide any leftover top-level configuration cards rather than duplicating them.
+   [...settings.children].forEach(x=>{
+     if(x.classList?.contains('card') && !x.closest('.settingsSubPage')) x.classList.add('hidden');
+   });
+
+   document.querySelectorAll('[data-settings-page]').forEach(b=>b.onclick=()=>showPage(b.dataset.settingsPage));
+   E('homeActivitiesBtn').onclick=()=>{
+     let b=E('openActivity');if(b)b.click();
+     let panel=E('activityPanel');if(panel){home.classList.add('hidden');panel.classList.remove('hidden')}
+   };
+   E('homeAboutBtn').onclick=()=>{
+     let b=E('aboutHelpBtn');if(b)b.click();
+     let panel=E('aboutHelpPanel');if(panel){home.classList.add('hidden');panel.classList.remove('hidden')}
+   };
+
+   // When closing Activities/About, return to Settings home.
+   ['closeActivity','closeAboutHelp'].forEach(id=>{
+     let b=E(id);if(b){let old=b.onclick;b.onclick=function(ev){if(old)old.call(this,ev);showHome()}}
+   });
+
+   // Keep overview values fresh.
+   ['workoutSelect','workoutName','mode','aName','bName','motivationText','voiceSource','language'].forEach(id=>{
+     let e=E(id);if(e)e.addEventListener('change',updateHome);
+   });
+   updateHome();showHome();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
 </body></html>

@@ -44,3 +44,16 @@ Device Voice plus Custom Voice 1, 2 and 3. Each custom profile stores separate r
 - More restrained grouped Settings design.
 - Larger touch targets and iPhone safe-area spacing.
 - Existing workout functionality retained.
+
+## v1.7 Settings redesign
+The main Settings screen is now an overview instead of one long configuration form.
+
+Sections:
+- Saved Workouts
+- Coaching & Commands
+- Voice
+- Language
+- Saved Activities
+- About & Help
+
+Each configuration area opens on its own focused subpage. Existing workout and voice behavior is retained.
