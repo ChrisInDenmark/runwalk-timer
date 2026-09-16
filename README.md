@@ -35,3 +35,12 @@ Device Voice plus Custom Voice 1, 2 and 3. Each custom profile stores separate r
 - Adds About & Help inside Settings.
 - Includes workout instructions, Break behavior, voice/custom recording help, local-data notes, version information, and a short About the creator section.
 - Help content is available in English, Danish, German and French.
+
+
+## v1.6 UI redesign
+- iPhone-oriented dark visual hierarchy.
+- Bottom Workout / Settings navigation.
+- Larger workout title, timer, Pause and Break controls.
+- More restrained grouped Settings design.
+- Larger touch targets and iPhone safe-area spacing.
+- Existing workout functionality retained.
